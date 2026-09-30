@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ChatGPT Chat·Work / Claude·Cowork / Perplexity Search·Computer 쉽게 이해하기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16233F; --ink-2:#3A4868; --muted:#6B7690;
+  --paper:#F3F6FB; --sheet:#FFFFFF; --line:#D6DDEA; --soft:#E8EEF7;
+  --navy:#1D3A6E; --gpt:#0E7C6B; --claude:#A2661A; --pplx:#1F6FB2;
+  --ok:#1E7A46; --warn:#B7791F; --bad:#B23A3A;
+  --hl:#FFF3B0;
+  --serif:"Gowun Batang","Noto Serif KR",Georgia,serif;
+  --sans:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E6ECF7; --ink-2:#C2CCE0; --muted:#8D98B2;
+    --paper:#0F1626; --sheet:#172036; --line:#2B3754; --soft:#1E2A44;
+    --navy:#8FB0EC; --gpt:#4FC7B2; --claude:#E3A857; --pplx:#6DB2EE;
+    --ok:#5BC98A; --warn:#E6B45A; --bad:#EE7F7F; --hl:#4A4220;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E6ECF7; --ink-2:#C2CCE0; --muted:#8D98B2;
+  --paper:#0F1626; --sheet:#172036; --line:#2B3754; --soft:#1E2A44;
+  --navy:#8FB0EC; --gpt:#4FC7B2; --claude:#E3A857; --pplx:#6DB2EE;
+  --ok:#5BC98A; --warn:#E6B45A; --bad:#EE7F7F; --hl:#4A4220;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 16px);scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.75;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--navy)}
+:focus-visible{outline:3px solid var(--pplx);outline-offset:2px;border-radius:4px}
+
+/* progress */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--navy);z-index:50}
+
+/* layout */
+.wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:40px;max-width:1180px;margin:0 auto;padding:0 20px}
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;overflow-y:auto;padding:28px 0 40px;font-size:14px}
+nav.toc h2{font-family:var(--serif);font-size:17px;margin:0 0 12px}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li a{display:block;padding:5px 10px;border-left:2px solid var(--line);color:var(--ink-2);text-decoration:none;line-height:1.4}
+nav.toc li a:hover{color:var(--ink);border-left-color:var(--muted)}
+nav.toc li a.active{color:var(--navy);border-left-color:var(--navy);font-weight:600;background:var(--soft)}
+nav.toc .tools{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer}
+.btn{border:1px solid var(--line);background:var(--sheet);color:var(--ink);padding:6px 12px;border-radius:8px;font-size:13.5px}
+.btn:hover{border-color:var(--navy)}
+main{padding:36px 0 80px;min-width:0}
+.col{max-width:760px}
+
+/* hero */
+header.hero{padding:10px 0 26px;border-bottom:2px solid var(--ink);margin-bottom:34px}
+.hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(26px,4vw,40px);line-height:1.3;margin:0 0 10px;letter-spacing:-.01em}
+.hero p.sub{margin:0;color:var(--ink-2)}
+.hero .date{display:inline-block;margin-top:14px;padding:3px 10px;border:1px solid var(--ink);border-radius:999px;font-size:13.5px}
+
+section{margin:0 0 56px}
+section>h2{font-family:var(--serif);font-size:clamp(22px,3vw,28px);line-height:1.35;margin:0 0 18px;display:flex;gap:12px;align-items:baseline}
+section>h2 .n{font-family:var(--sans);font-size:14px;font-weight:700;color:var(--sheet);background:var(--navy);border-radius:6px;padding:2px 8px;flex:none;transform:translateY(-3px)}
+h3{font-size:19px;margin:30px 0 10px;line-height:1.4}
+h4{font-size:16.5px;margin:20px 0 6px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin:3px 0}
+strong{font-weight:700}
+mark{background:var(--hl);color:inherit;padding:0 2px;border-radius:2px}
+
+blockquote{margin:14px 0 18px;padding:12px 18px;background:var(--sheet);border-left:4px solid var(--navy);border-radius:0 10px 10px 0}
+blockquote p:last-child{margin:0}
+.say{font-family:var(--serif);font-size:17.5px}
+
+.note{margin:16px 0;padding:14px 16px;border:1px dashed var(--line);border-radius:10px;font-size:15px;color:var(--ink-2);background:var(--sheet)}
+.note b{color:var(--ink)}
+.added{margin:18px 0;padding:14px 16px;border-radius:10px;background:var(--soft);font-size:15.5px}
+.added .tag{display:inline-block;font-size:12.5px;font-weight:700;color:var(--sheet);background:var(--ok);border-radius:5px;padding:1px 7px;margin-right:6px}
+.verify .tag{background:var(--warn)}
+
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 16px}
+.flow span{background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:14.5px}
+.flow i{font-style:normal;color:var(--muted)}
+
+.dialog{margin:10px 0 16px;display:grid;gap:8px}
+.dialog .m{max-width:85%;padding:8px 14px;border-radius:14px;font-size:15.5px}
+.dialog .h{background:var(--navy);color:#fff;justify-self:end;border-bottom-right-radius:4px}
+.dialog .a{background:var(--sheet);border:1px solid var(--line);justify-self:start;border-bottom-left-radius:4px}
+
+.wx{overflow-x:auto;margin:14px 0 20px;border:1px solid var(--line);border-radius:10px;background:var(--sheet)}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:520px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+thead th{background:var(--soft);font-weight:700;font-size:14.5px}
+tbody tr:last-child td{border-bottom:none}
+td.c,th.c{text-align:center}
+.yes{color:var(--ok);font-weight:700}
+.part{color:var(--warn);font-weight:700}
+.no{color:var(--muted)}
+.cap{font-size:13.5px;color:var(--muted);margin:-12px 0 20px}
+
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;font-size:13.5px;font-weight:600;border:1.5px solid currentColor}
+.gpt{color:var(--gpt)} .cl{color:var(--claude)} .px{color:var(--pplx)}
+
+.wrongright{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 18px}
+.wrongright div{padding:10px 14px;border-radius:10px;font-size:15.5px;background:var(--sheet);border:1px solid var(--line)}
+.wrongright .w{border-left:4px solid var(--bad)}
+.wrongright .r{border-left:4px solid var(--ok)}
+.wrongright b{display:block;font-size:13px;margin-bottom:2px}
+.wrongright .w b{color:var(--bad)} .wrongright .r b{color:var(--ok)}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0 18px}
+.box{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.box h4{margin-top:0}
+.box ul{margin-bottom:0}
+
+/* diagrams */
+figure{margin:18px 0 24px}
+figure svg{width:100%;height:auto;display:block}
+figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
+.svgbox{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:14px;overflow-x:auto}
+.svgbox svg{min-width:560px}
+svg text{font-family:var(--sans);fill:var(--ink)}
+svg .mut{fill:var(--muted)}
+svg .ln{stroke:var(--line)}
+svg .ink{stroke:var(--ink)}
+
+/* timeline */
+.tl{position:relative;margin:16px 0 24px;padding-left:26px}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl li{list-style:none;position:relative;margin:0 0 14px;padding:0}
+.tl li::before{content:"";position:absolute;left:-23px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--sheet);border:3px solid var(--navy)}
+.tl li.future::before{border-style:dashed}
+.tl .d{font-weight:700;font-size:14.5px;color:var(--navy)}
+.tl .t{display:block;font-size:15.5px}
+
+/* scenario picker */
+.picker{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0 22px}
+.picker .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.picker .opts button{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:6px 14px;font-size:14px}
+.picker .opts button[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.picker .out{border-top:1px solid var(--line);padding-top:12px;min-height:90px}
+.picker .out .q{font-family:var(--serif);font-size:17px;margin-bottom:8px}
+
+/* quiz */
+.quiz{counter-reset:q;display:grid;gap:12px;margin:14px 0}
+.qi{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.qi p{margin:0 0 10px;font-weight:600}
+.qi .ch{display:flex;gap:8px}
+.qi .ch button{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:5px 18px;font-weight:700}
+.qi .fb{margin-top:10px;font-size:15px;display:none}
+.qi.done .fb{display:block}
+.qi.right{border-color:var(--ok)} .qi.wrong{border-color:var(--bad)}
+.score{font-weight:700;margin-top:8px}
+
+/* builder */
+.builder{display:grid;gap:10px;background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}
+.builder label{font-size:14px;font-weight:600;display:grid;gap:4px}
+.builder input,.builder textarea{font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);width:100%}
+.builder textarea{min-height:60px;resize:vertical}
+.builder output{display:block;white-space:pre-wrap;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:15px;min-height:60px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+
+/* mnemonic cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0 20px}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:12px;padding:14px 16px}
+.card h4{margin:0 0 8px;color:var(--c)}
+.card .k{font-weight:700;margin-top:8px}
+.card .k:first-of-type{margin-top:0}
+.card p{font-size:15px;margin:0 0 4px;font-family:var(--serif)}
+
+.final{border:2px solid var(--ink);border-radius:14px;padding:22px 24px;background:var(--sheet)}
+.final p.big{font-family:var(--serif);font-size:clamp(19px,2.6vw,23px);line-height:1.6;margin:0 0 16px}
+.steps{display:grid;gap:8px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;padding:10px 14px 10px 46px;position:relative;background:var(--soft);border-radius:10px}
+.steps li::before{content:counter(s);position:absolute;left:12px;top:9px;width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-weight:700;font-size:13.5px;display:grid;place-items:center}
+
+.src ol{font-size:14px;color:var(--ink-2)}
+.src li{margin:6px 0}
+
+.mobile-toc{display:none}
+@media (max-width:920px){
+  .wrap{grid-template-columns:1fr;gap:0}
+  nav.toc{display:none}
+  .mobile-toc{display:block;margin:0 0 28px}
+  .mobile-toc details{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+  .mobile-toc summary{font-weight:700;cursor:pointer}
+  .mobile-toc ol{margin:10px 0 0;padding-left:20px;font-size:15px}
+  .two,.wrongright{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr}
+}
+@media print{
+  nav.toc,.mobile-toc,#progress,.picker,.builder,.quiz,.tools{display:none!important}
+  .wrap{display:block}
+  body{background:#fff;font-size:12pt}
+  section{break-inside:avoid-page}
+}
+</style>
+</head>
+<body>
+<div id="progress" aria-hidden="true"></div>
+<div class="wrap">
+
+<nav class="toc" aria-label="목차">
+  <h2>목차</h2>
+  <ol id="tocList"></ol>
+  <div class="tools">
+    <button class="btn" id="themeBtn" type="button">화면 밝기 전환</button>
+    <button class="btn" type="button" onclick="window.print()">인쇄하기</button>
+  </div>
+</nav>
+
+<main>
+<div class="col">
+
+<header class="hero">
+  <h1>ChatGPT Chat·Work<br>Claude·Cowork<br>Perplexity Search·Computer<br>쉽게 이해하기</h1>
+  <p class="sub">“알려줘”와 “맡길게”의 차이를 한 번에 정리하는 개인 공부 노트</p>
+  <span class="date">2026년 9월 말 기준</span>
+</header>
+
+<div class="mobile-toc"><details><summary>목차 열기</summary><ol id="tocMobile"></ol></details></div>
+
+<!-- 1 -->
+<section id="s1" data-toc="가장 중요한 결론">
+<h2><span class="n">1</span>가장 중요한 결론부터</h2>
+<p>세 서비스를 아주 단순하게 보면 다음과 같습니다.</p>
+<div class="wx"><table>
+<thead><tr><th>서비스</th><th>주로 답을 얻는 방식</th><th>여러 단계의 일을 맡기는 방식</th></tr></thead>
+<tbody>
+<tr><td><strong class="gpt">ChatGPT</strong></td><td>Chat</td><td>Work</td></tr>
+<tr><td><strong class="cl">Claude</strong></td><td>Chat</td><td>Cowork → <strong>현재 하나의 Claude로 통합 중</strong></td></tr>
+<tr><td><strong class="px">Perplexity</strong></td><td>Search</td><td>Computer</td></tr>
+</tbody></table></div>
+<p>초등학생에게 설명한다면 이렇게 말하면 됩니다.</p>
+<blockquote><p class="say"><strong>Chat·Search = “이것 좀 알려줘.”</strong><br><strong>Work·Cowork·Computer = “목표는 이것이니, 필요한 일을 해서 결과물까지 만들어 줘.”</strong></p></blockquote>
+<p>하지만 이것은 어디까지나 <strong>이해를 돕기 위한 큰 틀</strong>입니다.</p>
+<p>세 회사의 제품 구조가 완전히 똑같지는 않습니다.</p>
+
+<figure>
+<div class="svgbox">
+<svg viewBox="0 0 720 250" role="img" aria-labelledby="specT specD">
+<title id="specT">업무 주도권 스펙트럼</title>
+<desc id="specD">왼쪽은 사람이 주도하는 대화형, 오른쪽은 AI가 실행을 주도하는 에이전트형. Chat과 Search는 왼쪽, Work, Cowork, Computer는 오른쪽, 예약 작업은 가장 오른쪽에 위치한다.</desc>
+<defs>
+<linearGradient id="gr" x1="0" x2="1"><stop offset="0" stop-color="#1D3A6E" stop-opacity=".15"/><stop offset="1" stop-color="#1D3A6E" stop-opacity=".55"/></linearGradient>
+<marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+</defs>
+<text x="20" y="28" font-size="15" font-weight="700">사람이 한 단계씩 이끈다</text>
+<text x="700" y="28" font-size="15" font-weight="700" text-anchor="end">AI가 실행 단계를 주도한다</text>
+<rect x="20" y="110" width="680" height="16" rx="8" fill="url(#gr)"/>
+<!-- left -->
+<g>
+<line x1="110" y1="60" x2="110" y2="110" stroke="#0E7C6B" stroke-width="2"/>
+<text x="110" y="52" font-size="14" text-anchor="middle" fill="#0E7C6B" font-weight="700">ChatGPT Chat</text>
+<line x1="160" y1="126" x2="160" y2="170" stroke="#1F6FB2" stroke-width="2"/>
+<text x="160" y="188" font-size="14" text-anchor="middle" fill="#1F6FB2" font-weight="700">Perplexity Search</text>
+<line x1="220" y1="60" x2="220" y2="110" stroke="#A2661A" stroke-width="2"/>
+<text x="220" y="80" font-size="14" text-anchor="middle" fill="#A2661A" font-weight="700" dx="8">Claude Chat</text>
+</g>
+<!-- claude unified bracket -->
+<path d="M220,208 L220,216 L520,216 L520,208" fill="none" stroke="#A2661A" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="370" y="238" font-size="13.5" text-anchor="middle" fill="#A2661A">통합 Claude: 요청을 보고 스스로 판단 (Pro·Max부터 배포 중)</text>
+<!-- right -->
+<line x1="480" y1="60" x2="480" y2="110" stroke="#0E7C6B" stroke-width="2"/>
+<text x="480" y="52" font-size="14" text-anchor="middle" fill="#0E7C6B" font-weight="700">ChatGPT Work</text>
+<line x1="520" y1="126" x2="520" y2="170" stroke="#A2661A" stroke-width="2"/>
+<text x="520" y="188" font-size="14" text-anchor="middle" fill="#A2661A" font-weight="700">Claude Cowork</text>
+<line x1="580" y1="60" x2="580" y2="110" stroke="#1F6FB2" stroke-width="2"/>
+<text x="600" y="80" font-size="14" text-anchor="middle" fill="#1F6FB2" font-weight="700">Perplexity Computer</text>
+<line x1="665" y1="126" x2="665" y2="170" class="ink" stroke-width="2" stroke-dasharray="3 3"/>
+<text x="665" y="188" font-size="13" text-anchor="middle" class="mut">예약·트리거 작업</text>
+</svg>
+</div>
+<figcaption>추가 개념도: 업무 주도권 스펙트럼. 위치는 수치가 아니라 상대적인 이해를 돕기 위한 것입니다.</figcaption>
+</figure>
+</section>
+
+<!-- timeline added -->
+<section id="s1b" data-toc="추가: 2026년 흐름 타임라인">
+<h2><span class="n">+</span>추가: 2026년에 무슨 일이 있었나</h2>
+<p>공부할 때 “언제부터 이렇게 됐지?”를 헷갈리지 않도록, 확인된 날짜만 모았습니다.</p>
+<ol class="tl">
+<li><span class="d">2026. 2. 25</span><span class="t"><span class="pill px">Perplexity</span> Computer 출시. 처음에는 Max 구독자 전용, 이후 Pro로 확대</span></li>
+<li><span class="d">2026. 4</span><span class="t"><span class="pill px">Perplexity</span> Mac용 Personal Computer 공개 (클라우드 Computer의 로컬 확장판)</span></li>
+<li><span class="d">2026. 7. 9</span><span class="t"><span class="pill gpt">ChatGPT</span> Work 발표. Chat 탭 옆에 Work 탭 등장</span></li>
+<li><span class="d">2026. 7. 28</span><span class="t"><span class="pill px">Perplexity</span> Personal Computer Windows판 출시 (Max·Enterprise Max부터)</span></li>
+<li><span class="d">2026. 8. 19</span><span class="t"><span class="pill cl">Claude</span> 이날 이후 Cowork에서 만든 Artifact는 일반 Artifact와 같은 방식으로 동작 (데스크톱·웹)</span></li>
+<li><span class="d">2026. 9. 10</span><span class="t"><span class="pill gpt">ChatGPT</span> Library에 Box·Dropbox·SharePoint 추가. 웹의 Chat과 Work 양쪽에서 사용</span></li>
+<li><span class="d">2026. 9월 말</span><span class="t"><span class="pill cl">Claude</span> “Chat과 Cowork는 하나의 Claude” 새 경험 배포 시작 (Pro·Max부터)</span></li>
+<li class="future"><span class="d">2026. 10. 6 (예정)</span><span class="t"><span class="pill cl">Claude</span> Pro·Max의 새 Cowork 작업이 클라우드에서 실행. “내 컴퓨터에서만” 설정 삭제</span></li>
+</ol>
+<p class="cap">점선 원은 아직 오지 않은 예정일입니다.</p>
+</section>
+
+<!-- 2 -->
+<section id="s2" data-toc="진짜 차이">
+<h2><span class="n">2</span>진짜 차이는 이것이다</h2>
+<p>흔히 다음과 같이 설명합니다.</p>
+<blockquote><p>간단한 일 → Chat<br>복잡한 일 → Work</p></blockquote>
+<p>또는</p>
+<blockquote><p>답이 필요 → Chat<br>파일이 필요 → Work</p></blockquote>
+<p>하지만 둘 다 완전히 정확한 기준은 아닙니다.</p>
+<p>Chat도 복잡한 분석을 할 수 있고 파일을 사용할 수 있으며, Search도 여러 출처를 조사할 수 있습니다.</p>
+<p>더 정확한 기준은 이것입니다.</p>
+
+<div class="two">
+<div class="box">
+<h4>대화형</h4>
+<p><strong>사람이 계속 AI와 주고받으며 일을 이끌어 간다.</strong></p>
+<div class="dialog">
+<div class="m h">이것 설명해 줘.</div>
+<div class="m a">이렇습니다.</div>
+<div class="m h">조금 더 쉽게.</div>
+<div class="m a">이렇게 바꾸겠습니다.</div>
+<div class="m h">표로 만들어 줘.</div>
+</div>
+<p style="margin:0">→ <strong>사람이 한 단계씩 방향을 잡습니다.</strong></p>
+</div>
+<div class="box">
+<h4>에이전트형</h4>
+<p><strong>사람은 목표와 조건을 주고, AI가 여러 실행 단계를 주도한다.</strong></p>
+<div class="dialog">
+<div class="m h">이 설문 3개와 작년 보고서를 분석해서 올해 결과보고서와 발표자료를 만들어 줘.</div>
+</div>
+<div class="flow"><span>자료 확인</span><i>→</i><span>분석</span><i>→</i><span>계산</span><i>→</i><span>비교</span><i>→</i><span>표 작성</span><i>→</i><span>그래프 작성</span><i>→</i><span>보고서 작성</span><i>→</i><span>발표자료 제작</span></div>
+<p style="margin:0">→ <strong>AI에게 실행 주도권을 더 많이 맡깁니다.</strong></p>
+</div>
+</div>
+
+<p>따라서 가장 오래 기억할 기준은</p>
+<blockquote><p class="say"><strong>“내가 AI와 대화를 이끌어 갈 것인가, 목표를 주고 여러 단계의 일을 맡길 것인가?”</strong></p></blockquote>
+<p>입니다.</p>
+
+<div class="wx"><table>
+<thead><tr><th>구분 기준</th><th>정확도</th><th>왜 그런가</th></tr></thead>
+<tbody>
+<tr><td>간단한 일 vs 복잡한 일</td><td class="part">부분적</td><td>Chat도 복잡한 분석을 하고, Search도 다중 출처 조사를 한다</td></tr>
+<tr><td>답 vs 파일</td><td class="part">부분적</td><td>Chat에서도 파일을 읽고 결과물을 만들 수 있다</td></tr>
+<tr><td>대화 주도 vs 실행 위임</td><td class="yes">가장 정확</td><td>누가 다음 단계를 결정하느냐는 제품이 바뀌어도 유지된다</td></tr>
+</tbody></table></div>
+<p class="cap">추가 표: 세 가지 구분 기준 비교</p>
+</section>
+
+<!-- 3 -->
+<section id="s3" data-toc="ChatGPT: Chat vs Work">
+<h2><span class="n">3</span>ChatGPT : Chat vs Work</h2>
+
+<h3>① Chat — “옆자리의 똑똑한 동료”</h3>
+<p>Chat은 우리가 평소 사용하는 ChatGPT입니다.</p>
+<p>질문하고 대답을 받으면서 함께 문제를 해결합니다.</p>
+<p>예를 들어</p>
+<ul>
+<li>“고교학점제를 초등학생도 이해하게 설명해 줘.”</li>
+<li>“이 안내문을 학부모가 읽기 쉽게 고쳐 줘.”</li>
+<li>“이 PDF에서 중요한 내용만 찾아 줘.”</li>
+<li>“두 자료를 비교해 줘.”</li>
+</ul>
+<p>와 같은 일을 할 수 있습니다.</p>
+<p>즉,</p>
+<div class="flow"><span>질문</span><i>→</i><span>답</span><i>→</i><span>수정 요청</span><i>→</i><span>다시 답</span></div>
+<p>이라는 방식이 중심입니다.</p>
+
+<h3>② Work — “업무를 통째로 맡는 조교”</h3>
+<p>Work는 목표와 결과물을 주면 AI가 필요한 여러 단계를 스스로 계획하고 실행하는 쪽에 초점을 둡니다.</p>
+<p>예를 들어</p>
+<blockquote><p>“학생 설문 Excel 3개와 작년 결과보고서를 분석해서<br>올해 진로교육 운영 결과보고서를 작성하고<br>표와 그래프를 넣은 발표자료까지 만들어 줘.”</p></blockquote>
+<p>라고 할 수 있습니다.</p>
+<p>이 경우 Work는</p>
+<div class="flow"><span>자료 확인</span><i>→</i><span>분석</span><i>→</i><span>계산</span><i>→</i><span>문서 작성</span><i>→</i><span>표·그래프 제작</span><i>→</i><span>최종 결과물</span></div>
+<p>같은 작업을 이어서 수행할 수 있습니다.</p>
+<p>OpenAI는 Work를 앱·파일·브라우저 등을 활용해 장시간·다단계 작업을 수행하는 환경으로 제공하고 있습니다.</p>
+
+<div class="added"><span class="tag">추가</span>OpenAI 공식 도움말은 Work의 용도를 “주제 조사, 정보 분석, 문서·스프레드시트·프레젠테이션·보고서·Site(웹페이지) 제작”으로 적고 있습니다. 또 Work와 Codex에서만 쓰는 전용 모델(GPT-6 Sol, GPT-6 Luna 등)이 있어 일반 Chat에서는 쓸 수 없고, Work의 사용량은 Chat과 별도로 Codex와 같은 허용량 구조에서 차감됩니다.</div>
+
+<h3>Work는 웹에서도 일을 할 수 있다</h3>
+<p>Work에는 웹 작업 기능도 있습니다.</p>
+<p>클라우드 브라우저를 이용하면 지원되는 사이트에서</p>
+<ul><li>웹페이지 읽기</li><li>링크 이동</li><li>버튼 클릭</li><li>양식 입력</li><li>여러 페이지 조사</li></ul>
+<p>등을 수행할 수 있습니다.</p>
+<p>사용자의 로그인이나 확인이 필요한 순간에는 작업을 멈추고 사용자의 입력이나 승인을 요구할 수 있습니다.</p>
+<p>데스크톱 앱에서는 별도의 내장 브라우저를 이용해 더 직접적인 웹 작업도 가능합니다.</p>
+<p>따라서</p>
+<div class="two">
+<div class="box"><p style="margin:0">“웹 검색 결과를 알려 줘.”</p></div>
+<div class="box"><p style="margin:0">“사이트들을 돌아다니며 필요한 자료를 수집하고 정리해서 보고서를 만들어 줘.”</p></div>
+</div>
+<p>의 차이라고 생각하면 쉽습니다.</p>
+
+<h3>중요한 사실 ① “Chat은 파일을 못 쓰고 Work만 파일을 쓴다” → 틀린 구분</h3>
+<p>파일 사용 여부는 핵심 차이가 아닙니다.</p>
+<p>Chat도 업로드 파일이나 지원되는 연결 파일 서비스를 활용할 수 있습니다.</p>
+<p>따라서</p>
+<div class="wrongright">
+<div class="w"><b>틀림</b>Chat = 파일 사용 불가</div>
+<div class="r"><b>맞음</b>Chat = 대화 중심</div>
+<div class="w"><b>틀림</b>Work = 파일을 쓰는 기능</div>
+<div class="r"><b>맞음</b>Work = <strong>여러 단계의 업무 위임 중심</strong></div>
+</div>
+<p>이라고 이해하는 것이 좋습니다.</p>
+<p>첨부 자료에서도 이 점을 명확히 지적하고 있습니다.</p>
+<div class="added"><span class="tag">추가 근거</span>2026년 9월 10일부터 Box·Dropbox·SharePoint가 Google Drive와 함께 ChatGPT Library에 들어왔고, 웹의 Chat과 Work 양쪽에서 쓸 수 있습니다. 폴더를 선택해 그 안의 파일 전체를 대상으로 작업하는 것도 가능합니다. (Go·Plus·Pro·Business·Edu·Healthcare·Enterprise 대상 순차 배포)</div>
+
+<h3>중요한 사실 ② ChatGPT Work도 내 컴퓨터 파일을 사용할 수 있다</h3>
+<p>ChatGPT 데스크톱 앱의 Work에서는 사용자가 로컬 폴더나 프로젝트에 권한을 주면 그 안의 파일을 사용할 수 있습니다.</p>
+<p>반면 웹·모바일의 Work는 사용자의 PC 파일에 직접 접근하지 않습니다.</p>
+<p>또 중요한 점은 <mark><strong>로컬에서 작업하더라도 메시지와 작업 맥락 일부는 클라우드에 저장될 수 있다는 것</strong></mark>입니다.</p>
+<p>따라서</p>
+<blockquote><p>“로컬 파일 작업 = Claude만 가능”</p></blockquote>
+<p>이라고 설명하면 현재는 틀립니다.</p>
+
+<div class="wx"><table>
+<thead><tr><th>ChatGPT Work 실행 위치</th><th class="c">웹</th><th class="c">모바일</th><th class="c">데스크톱 앱</th></tr></thead>
+<tbody>
+<tr><td>실행 방식</td><td class="c">클라우드</td><td class="c">클라우드</td><td class="c">클라우드 또는 로컬</td></tr>
+<tr><td>내 PC 파일 직접 접근</td><td class="c no">✕</td><td class="c no">✕</td><td class="c yes">○ (권한 부여 시)</td></tr>
+<tr><td>데스크톱 앱 사용</td><td class="c no">✕</td><td class="c no">✕</td><td class="c yes">○ (권한 부여 시)</td></tr>
+<tr><td>기기 간 이어하기</td><td class="c yes">○</td><td class="c yes">○</td><td class="c part">클라우드 작업만</td></tr>
+</tbody></table></div>
+<p class="cap">추가 표: OpenAI 도움말 기준. 요금제·조직 설정에 따라 다를 수 있습니다.</p>
+
+<h3>중요한 사실 ③ Work ≠ Scheduled Tasks</h3>
+<p>Work와 Scheduled Tasks는 같은 기능이 아닙니다.</p>
+<div class="two">
+<div class="box"><h4>Work</h4><p style="margin:0"><strong>일을 수행하는 업무 환경</strong></p></div>
+<div class="box"><h4>Scheduled Tasks</h4><p style="margin:0"><strong>그 일을 언제 실행할지 정하는 자동화 기능</strong></p></div>
+</div>
+<p>예를 들어</p>
+<blockquote><p>“매주 월요일 오전에 새로운 자료를 확인해 줘.”</p></blockquote>
+<p>처럼</p>
+<ul><li>한 번 실행</li><li>일정에 맞춰 반복</li><li>특정 변화 감지</li><li>이벤트 기반 실행</li></ul>
+<p>등을 설정할 수 있습니다.</p>
+<p>Work는 Scheduled Tasks와 결합해 반복·모니터링 업무도 수행할 수 있습니다.</p>
+<p>즉,</p>
+<blockquote><p class="say"><strong>Work = 직원</strong><br><strong>Scheduled Tasks = 직원에게 주는 근무 일정</strong></p></blockquote>
+<p>이라고 생각하면 쉽습니다.</p>
+<div class="added"><span class="tag">추가</span>“이벤트 기반 실행”의 공식 예시는 새 Gmail 메일 도착, 새 Slack 채널 메시지, GitHub 풀 리퀘스트 활동입니다. Free·Go 요금제에서는 이벤트 기반 작업을 쓸 수 없습니다.</div>
+
+<h3>중요한 사실 ④ ChatGPT에는 Codex도 있다</h3>
+<p>ChatGPT 데스크톱 환경에는 <strong>Codex</strong>라는 별도의 개발용 작업 환경도 있습니다.</p>
+<p>Codex는 특히</p>
+<ul><li>프로그램 코드 작성</li><li>디버깅</li><li>저장소 작업</li><li>터미널과 개발 도구 사용</li></ul>
+<p>등 소프트웨어 개발 업무에 특화되어 있습니다.</p>
+<p>현재 OpenAI는 <strong>Chat / Work / Codex</strong>를 서로 다른 작업 경험으로 구분하고 있으며, Codex는 별도 뷰와 별도의 작업 기록을 사용합니다.</p>
+<p>초보자가 기억할 필요가 있는 수준으로 줄이면</p>
+<div class="wx"><table>
+<thead><tr><th>모드</th><th>한 줄 정의</th><th>대표 작업</th></tr></thead>
+<tbody>
+<tr><td><strong>Chat</strong></td><td>대화</td><td>질문, 검색, 아이디어, 빠른 도움</td></tr>
+<tr><td><strong>Work</strong></td><td>일반 업무 수행</td><td>조사·분석, 문서·표·발표자료·Site 제작</td></tr>
+<tr><td><strong>Codex</strong></td><td>개발 업무 수행</td><td>코드 작성·디버깅, 테스트, 저장소 작업</td></tr>
+</tbody></table></div>
+<p>입니다.</p>
+<div class="added"><span class="tag">추가</span>Codex Cloud를 쓰면 웹·모바일에서도 코딩 작업을 시작하고 이어갈 수 있습니다. 즉 “Codex = 데스크톱 전용”이라고 외우면 불완전합니다.</div>
+</section>
+
+<!-- 4 -->
+<section id="s4" data-toc="Claude: Chat vs Cowork">
+<h2><span class="n">4</span>Claude : Chat vs Cowork</h2>
+<p>여기에는 <strong>2026년 9월 말 현재 매우 중요한 변화</strong>가 있습니다.</p>
+
+<h3>원래는</h3>
+<p>Claude에는</p>
+<div class="two">
+<div class="box"><h4>Chat</h4><p style="margin:0">대화하면서 질문하고 답을 받는 공간</p></div>
+<div class="box"><h4>Cowork</h4><p style="margin:0">복잡한 일을 여러 단계에 걸쳐 맡기는 업무 환경</p></div>
+</div>
+<p>이 따로 있었습니다.</p>
+<p>그런데 현재 Anthropic이 이 구조를 바꾸고 있습니다.</p>
+
+<h3>가장 중요한 최신 변화: “Chat과 Cowork가 하나의 Claude로 합쳐지는 중”</h3>
+<p>Anthropic은 현재 <strong>Chat과 Cowork의 구분을 없애는 새로운 Claude 경험을 Pro·Max부터 단계적으로 배포하고 있습니다.</strong></p>
+<p>새 환경에서는 사용자가</p>
+<blockquote><p>“Chat으로 할까, Cowork로 할까?”</p></blockquote>
+<p>를 먼저 고를 필요가 없습니다.</p>
+<p>그냥 Claude에게</p>
+<blockquote><p>“이것 설명해 줘.”</p></blockquote>
+<p>라고 하면 짧게 답하고,</p>
+<blockquote><p>“이 파일들을 분석해서 보고서와 PPT를 만들어 줘.”</p></blockquote>
+<p>라고 하면 Claude가 필요한 도구를 선택해서 업무를 수행합니다.</p>
+<p>Anthropic은 이를 공식적으로 <strong>“Claude Cowork and chat are one Claude”</strong>라고 설명하고 있습니다.</p>
+
+<figure>
+<div class="svgbox">
+<svg viewBox="0 0 720 200" role="img" aria-labelledby="mgT mgD">
+<title id="mgT">Claude 구조 변화</title>
+<desc id="mgD">예전에는 사용자가 Chat과 Cowork 중 하나를 골랐고, 새 구조에서는 하나의 Claude가 요청을 보고 답변 또는 작업을 선택한다.</desc>
+<text x="170" y="24" font-size="15" font-weight="700" text-anchor="middle">예전</text>
+<text x="545" y="24" font-size="15" font-weight="700" text-anchor="middle">새 구조 (배포 중)</text>
+<rect x="100" y="40" width="140" height="36" rx="18" fill="none" class="ink" stroke-width="1.5"/>
+<text x="170" y="63" font-size="14" text-anchor="middle">사용자가 먼저 선택</text>
+<line x1="170" y1="76" x2="100" y2="120" class="ink" stroke-width="1.5"/>
+<line x1="170" y1="76" x2="240" y2="120" class="ink" stroke-width="1.5"/>
+<rect x="40" y="120" width="120" height="44" rx="10" fill="none" stroke="#A2661A" stroke-width="2"/>
+<text x="100" y="147" font-size="14" text-anchor="middle">Chat</text>
+<rect x="180" y="120" width="120" height="44" rx="10" fill="none" stroke="#A2661A" stroke-width="2"/>
+<text x="240" y="147" font-size="14" text-anchor="middle">Cowork</text>
+<line x1="345" y1="100" x2="395" y2="100" class="ink" stroke-width="2" marker-end="url(#ar)" style="color:var(--ink)"/>
+<rect x="455" y="40" width="180" height="36" rx="18" fill="#A2661A" fill-opacity=".15" stroke="#A2661A" stroke-width="2"/>
+<text x="545" y="63" font-size="14" text-anchor="middle" font-weight="700">하나의 Claude가 판단</text>
+<line x1="545" y1="76" x2="475" y2="120" class="ink" stroke-width="1.5"/>
+<line x1="545" y1="76" x2="615" y2="120" class="ink" stroke-width="1.5"/>
+<rect x="415" y="120" width="120" height="44" rx="10" fill="none" class="ink" stroke-width="1.5"/>
+<text x="475" y="147" font-size="14" text-anchor="middle">짧은 답변</text>
+<rect x="555" y="120" width="120" height="44" rx="10" fill="none" class="ink" stroke-width="1.5"/>
+<text x="615" y="147" font-size="14" text-anchor="middle">작업 수행</text>
+<text x="545" y="190" font-size="13" text-anchor="middle" class="mut">사용자는 원하는 것만 말한다</text>
+</svg>
+</div>
+<figcaption>추가 도식: Claude 구조 변화</figcaption>
+</figure>
+
+<p>따라서 앞으로는</p>
+<div class="wrongright">
+<div class="w"><b>예전 설명</b>Claude Chat vs Cowork</div>
+<div class="r"><b>오래가는 설명</b>Claude가 요청을 보고 ‘대답할지, 일을 수행할지’ 판단한다</div>
+</div>
+<p>라고 이해하는 것이 더 오래가는 설명입니다.</p>
+<p>아직 새 환경이 적용되지 않은 일부 계정에서는 기존의 Chat/Cowork 선택지가 그대로 보일 수 있습니다.</p>
+<div class="added"><span class="tag">추가</span>구분법: Pro·Max 요금제인데 메시지 입력창에 “Chat”과 “Cowork” 선택지가 보이지 않는다면 새 경험이 적용된 것입니다. Chrome 사이드패널에서 Claude를 열면 선택지 없이 바로 Cowork 세션이 시작됩니다.</div>
+
+<h3>Claude의 업무형 동작은 무엇을 할까?</h3>
+<p>예를 들어 이렇게 요청합니다.</p>
+<blockquote><p>“이 다섯 개의 인터뷰 기록을 읽고 공통 주제를 찾아서 보고서를 만들고, 그 내용을 10장짜리 발표자료로 바꿔 줘.”</p></blockquote>
+<p>Claude는</p>
+<ul><li>파일 읽기</li><li>웹 검색</li><li>코드 실행</li><li>자료 분석</li><li>보고서 작성</li><li>스프레드시트 작성</li><li>프레젠테이션 제작</li></ul>
+<p>등을 하나의 작업으로 이어갈 수 있습니다.</p>
+<p>작업이 길어지면 클라우드에서 계속 실행될 수도 있습니다.</p>
+<div class="added"><span class="tag">추가</span>공식 기능 설명에는 복잡한 일을 작은 작업으로 나눠 동시에 처리하는 “하위 에이전트 조율”, 대화 시간 제한에 끊기지 않는 “장시간 작업”이 포함됩니다. 예약 작업은 입력창에 <code>/schedule</code>을 입력하거나 왼쪽 사이드바의 “Scheduled”에서 만듭니다.</div>
+
+<h3>Claude는 데스크톱 전용인가?</h3>
+<p>아닙니다.</p>
+<p>현재 Cowork 기능은</p>
+<ul><li>데스크톱</li><li>웹</li><li>모바일</li><li>Claude in Chrome</li></ul>
+<p>등에서 제공되고 있습니다.</p>
+<p>세션과 파일도 Claude 계정에 연결되어 여러 기기에서 이어볼 수 있습니다.</p>
+<p>다만 <strong>내 컴퓨터에 있는 실제 파일이나 브라우저, 앱을 사용하려면 데스크톱 앱의 역할이 여전히 중요합니다.</strong></p>
+
+<div class="wx"><table>
+<thead><tr><th>기능 (Claude 도움말 기준)</th><th class="c">데스크톱</th><th class="c">웹</th><th class="c">모바일</th></tr></thead>
+<tbody>
+<tr><td>작업 시작·지시·검토</td><td class="c yes">○</td><td class="c yes">○</td><td class="c yes">○</td></tr>
+<tr><td>다른 기기에서 시작한 세션 이어하기</td><td class="c yes">○</td><td class="c yes">○</td><td class="c yes">○</td></tr>
+<tr><td>커넥터</td><td class="c yes">○</td><td class="c yes">○</td><td class="c yes">○</td></tr>
+<tr><td>스킬·플러그인</td><td class="c yes">○</td><td class="c yes">○</td><td class="c yes">○</td></tr>
+<tr><td>예약 작업</td><td class="c yes">○</td><td class="c yes">○</td><td class="c yes">○</td></tr>
+<tr><td>Projects</td><td class="c yes">○</td><td class="c yes">○</td><td class="c yes">○</td></tr>
+<tr><td>Artifacts (8/19 이후 생성)</td><td class="c yes">○</td><td class="c yes">○</td><td class="c no">✕</td></tr>
+<tr><td>로컬 파일 접근</td><td class="c yes">○</td><td class="c part">△</td><td class="c part">△</td></tr>
+<tr><td>브라우저 사용</td><td class="c yes">○</td><td class="c part">△</td><td class="c part">△</td></tr>
+<tr><td>컴퓨터 사용 (화면 조작)</td><td class="c yes">○</td><td class="c part">△</td><td class="c part">△</td></tr>
+</tbody></table></div>
+<p class="cap">추가 표. △ = 데스크톱 앱이 켜져 있고, 데스크톱에서 시작한 세션일 때만 가능. Cowork 클라우드는 베타이며 기능이 바뀔 수 있습니다.</p>
+
+<h3>Claude의 클라우드와 로컬을 구분하자</h3>
+<p>Claude 업무형 기능을 이해하려면 이제</p>
+<div class="wrongright">
+<div class="w"><b>예전 축</b>Chat vs Cowork</div>
+<div class="r"><b>새로 중요한 축</b>클라우드에서 할 일 vs 내 컴퓨터를 이용해야 할 일</div>
+</div>
+<p>구분도 중요합니다.</p>
+<div class="two">
+<div class="box">
+<h4>클라우드 작업</h4>
+<p>Anthropic 서버에서 실행됩니다.</p>
+<p>예:</p>
+<ul><li>웹 조사</li><li>업로드 자료 분석</li><li>보고서 제작</li><li>스프레드시트 제작</li><li>프레젠테이션 제작</li><li>예약 업무</li></ul>
+<p style="margin:10px 0 0">컴퓨터를 닫아도 계속 진행할 수 있습니다.</p>
+</div>
+<div class="box">
+<h4>내 컴퓨터가 필요한 작업</h4>
+<p>예:</p>
+<ul><li>PC의 특정 폴더 읽기·쓰기</li><li>로컬 파일 수정</li><li>데스크톱 앱 사용</li><li>화면 직접 클릭</li><li>로컬 브라우저 사용</li></ul>
+<p style="margin:10px 0 0">이런 작업에는 Claude Desktop이 필요하며, 관련 기능을 쓰는 동안 데스크톱 앱이 열려 있어야 할 수 있습니다.</p>
+</div>
+</div>
+<div class="added"><span class="tag">추가</span>2026년 10월 6일부터 Pro·Max 요금제의 <strong>새</strong> Cowork 작업은 클라우드에서 실행되고, 설정의 “내 컴퓨터에서만” 옵션이 사라집니다. 이미 내 컴퓨터에서 시작한 작업은 그대로 남습니다. 폴더 자체는 계속 내 컴퓨터에 있고, 작업에 필요한 파일이 있으면 그 파일의 사본만 가져갑니다. 세션을 삭제하면 가져간 사본도 함께 삭제됩니다. 작업을 반드시 한 컴퓨터 안에서만 돌려야 한다면 Anthropic은 데스크톱 앱의 Claude Code를 대안으로 안내합니다.</div>
+
+<h3>Claude는 컴퓨터 화면도 직접 사용할 수 있다</h3>
+<p>Claude에는 <strong>Computer Use</strong> 기능이 있습니다.</p>
+<p>필요한 경우 화면에서 직접</p>
+<ul><li>클릭</li><li>타이핑</li><li>앱 실행</li><li>화면 이동</li></ul>
+<p>등을 수행할 수 있습니다.</p>
+<p>이것은 폴더 접근이나 커넥터와는 다른 형태의 권한입니다.</p>
+<p>따라서</p>
+<blockquote><p>“특정 폴더만 허용했으니 Claude가 컴퓨터의 다른 것은 절대 볼 수 없다.”</p></blockquote>
+<p>처럼 단순하게 이해하면 안 됩니다.</p>
+<p>어떤 기능을 켰는지를 함께 확인해야 합니다.</p>
+<div class="added"><span class="tag">추가</span>Computer Use는 Pro·Max에서 베타입니다. 휴대폰에서 지시하면 켜져 있는 내 데스크톱에서 작업하는 “Dispatch” 기능도 있으며, 이때는 컴퓨터가 깨어 있고 Claude Desktop 앱이 열려 있어야 합니다.</div>
+
+<h3>Claude의 브라우저 기능</h3>
+<p>Cowork 계열 업무에서는 Claude가</p>
+<ul><li>Claude Desktop의 내장 브라우저</li><li>Claude in Chrome</li></ul>
+<p>등을 사용할 수 있습니다.</p>
+<p>내장 브라우저에서는 Claude가 사이트를 열고, 읽고, 클릭하고, 입력할 수 있습니다.</p>
+<p>따라서 Claude도 단순 파일 작업만 하는 것이 아니라 웹 기반 업무까지 수행할 수 있습니다.</p>
+
+<h3>Cowork ≠ Artifacts</h3>
+<p>이 부분은 반드시 구분해야 합니다.</p>
+<div class="two">
+<div class="box">
+<h4>Artifacts</h4>
+<p>Claude가 만든</p>
+<ul><li>문서</li><li>코드</li><li>웹페이지</li><li>도표</li><li>인터랙티브 결과물</li></ul>
+<p style="margin:10px 0 0">등을 화면에서 보고 수정하는 <strong>결과물 공간</strong>에 가깝습니다.</p>
+</div>
+<div class="box">
+<h4>Cowork</h4>
+<p style="margin:0">파일·도구·웹·앱 등을 활용해서 <strong>업무 자체를 수행하는 방식</strong>입니다.</p>
+</div>
+</div>
+<p>따라서</p>
+<blockquote><p class="say"><strong>Artifacts = 결과물을 보여주는 그릇</strong><br><strong>Cowork = 일을 수행하는 방식</strong></p></blockquote>
+<p>정도로 이해하면 쉽습니다.</p>
+<p>그리고 현재는 Cowork에서 만든 Artifact도 일반 Artifact 체계와 함께 사용할 수 있습니다. Anthropic은 2026년 8월 19일 이후 Cowork에서 만들어진 Artifact가 다른 Artifact와 같은 방식으로 동작한다고 안내합니다.</p>
+
+<h3>Projects도 Cowork와 다르다</h3>
+<p>Claude Projects는</p>
+<ul><li>관련 파일</li><li>지침</li><li>작업</li><li>문맥</li></ul>
+<p>등을 한 공간에 묶어 놓는 지속적인 작업 공간입니다.</p>
+<p>즉,</p>
+<blockquote><p class="say"><strong>Projects = 서류철·업무실</strong><br><strong>Cowork/업무형 Claude = 그 안에서 일하는 직원</strong></p></blockquote>
+<p>정도로 보면 이해하기 쉽습니다.</p>
+
+<div class="wx"><table>
+<thead><tr><th>Claude 용어</th><th>비유</th><th>하는 일</th></tr></thead>
+<tbody>
+<tr><td><strong>Chat</strong></td><td>상담 창구</td><td>대화하며 질문하고 답을 받음</td></tr>
+<tr><td><strong>Projects</strong></td><td>서류철·업무실</td><td>관련 파일·지침·작업·문맥을 한곳에 묶음</td></tr>
+<tr><td><strong>Artifacts</strong></td><td>결과물 그릇</td><td>만든 문서·코드·웹페이지를 보고 수정</td></tr>
+<tr><td><strong>Cowork</strong></td><td>일하는 직원</td><td>파일·도구·웹·앱으로 여러 단계 업무 수행</td></tr>
+<tr><td><strong>Scheduled</strong></td><td>근무 일정표</td><td>작업을 정해진 때 자동 실행</td></tr>
+<tr><td><strong>Computer Use</strong></td><td>직원의 손</td><td>화면을 직접 클릭·입력·이동</td></tr>
+</tbody></table></div>
+<p class="cap">추가 표: Claude 용어 한눈에 정리</p>
+<div class="added"><span class="tag">추가</span>프로젝트에서 Chat이나 Cowork 세션을 시작하면 Claude가 프로젝트 지식을 맥락으로 씁니다. 다만 Cowork는 프로젝트 내용을 직접 바꾸지 않으므로, 남기고 싶은 결과물은 사용자가 프로젝트에 추가해야 합니다.</div>
+</section>
+
+<!-- 5 -->
+<section id="s5" data-toc="Perplexity: Search vs Computer">
+<h2><span class="n">5</span>Perplexity : Search vs Computer</h2>
+<p>Perplexity는 세 회사 중 구분이 가장 명확합니다.</p>
+<p>공식 설명은</p>
+<blockquote><p class="say"><strong>Search = Understanding</strong><br><strong>Computer = Execution</strong></p></blockquote>
+<p>입니다.</p>
+<p>쉽게 번역하면</p>
+<blockquote><p class="say"><strong>Search = 알아보기</strong><br><strong>Computer = 실행하기</strong></p></blockquote>
+<p>입니다.</p>
+
+<h3>① Search — “출처를 찾아주는 사서”</h3>
+<p>Perplexity Search에서는 질문하면 인터넷 자료를 찾아</p>
+<ul><li>자료 조사</li><li>요약</li><li>비교</li><li>설명</li></ul>
+<p>을 하고 출처를 함께 보여 줍니다.</p>
+<p>예를 들어</p>
+<blockquote><p>“2028학년도 서울대 전형 변경사항을 공식 자료를 중심으로 정리해 줘.”</p></blockquote>
+<p>라고 하면 관련 웹 자료를 조사해 답을 만듭니다.</p>
+<p>따라서 Search의 결과물은 주로</p>
+<blockquote><p class="say"><strong>출처가 붙은 답변</strong></p></blockquote>
+<p>입니다.</p>
+
+<h3>Search도 어려운 조사를 할 수 있다</h3>
+<p>중요합니다.</p>
+<div class="wrongright"><div class="w"><b>틀림</b>Search = 간단한 질문만 가능</div><div class="r"><b>맞음</b>Search도 복잡한 다중 출처 조사가 가능</div></div>
+<p>은 아닙니다.</p>
+<p>Perplexity는 Search도</p>
+<ul><li>여러 출처 비교</li><li>복잡한 질문</li><li>조사형 질문</li><li>첨부 파일 활용</li></ul>
+<p>등을 처리할 수 있다고 설명합니다.</p>
+<p>따라서</p>
+<blockquote><p>간단한 질문 = Search<br>어려운 질문 = Computer</p></blockquote>
+<p>로 구분하면 안 됩니다.</p>
+<div class="added"><span class="tag">추가</span>Perplexity 공식 예시: 엔비디아의 3~5년 현금흐름할인(DCF) 모델을 만들고 실시간 시장 데이터로 AMD·브로드컴과 비교하는 일을 Search의 출처 달린 답변 한 번으로 처리합니다. 또 Search는 구독에 포함된 프리미엄 출처와 연결된 지식에서도 결과를 가져올 수 있습니다.</div>
+
+<h3>② Computer — “디지털 직원”</h3>
+<p>Computer는 Perplexity가 <strong>실행형 작업</strong>을 위해 제공하는 기능입니다.</p>
+<p>예를 들어</p>
+<blockquote><p>“경남지역 대학의 2028 신설학과를 조사해서<br>대학별 비교표를 만들고<br>보고서와 발표자료를 만들고<br>이후 변경사항도 정기적으로 확인해 줘.”</p></blockquote>
+<p>처럼 요청할 수 있습니다.</p>
+<p>Computer는</p>
+<div class="flow"><span>조사</span><i>→</i><span>분석</span><i>→</i><span>자료 결합</span><i>→</i><span>파일 제작</span><i>→</i><span>외부 도구 활용</span><i>→</i><span>반복 실행</span></div>
+<p>까지 이어갈 수 있습니다.</p>
+<p>Perplexity는 Computer를 다단계·다도구 업무에 사용하는 기능으로 설명하며, 보고서·스프레드시트·프레젠테이션·대시보드·웹사이트 같은 결과물을 만들 수 있다고 안내합니다.</p>
+
+<h4>Perplexity 공식 선택 기준</h4>
+<div class="wx"><table>
+<thead><tr><th>Search를 쓸 때</th><th>Computer로 넘어갈 때</th></tr></thead>
+<tbody>
+<tr><td>답 자체가 결과물일 때</td><td>여러 앱이나 연결 도구를 오가야 할 때</td></tr>
+<tr><td>맥락이 질문이나 첨부 파일 하나에 다 들어갈 때</td><td>일정에 따라 실행하거나 변화를 계속 감시해야 할 때</td></tr>
+<tr><td>출처 달린 한 번의 답으로 충분할 때</td><td>보고서·스프레드시트·발표자료·대시보드처럼 여러 자료로 만든 완성품이 필요할 때</td></tr>
+<tr><td>—</td><td>일을 완성·반복·포장·전달해야 할 때</td></tr>
+</tbody></table></div>
+<p class="cap">추가 표: Perplexity Academy “Search vs Computer” 기준</p>
+
+<h3>Computer는 여러 앱을 연결한다</h3>
+<p>Perplexity는 Computer가 다양한 외부 애플리케이션 및 도구와 연결될 수 있다고 설명합니다.</p>
+<p>공식 예에는</p>
+<ul><li>Google Drive</li><li>Slack</li><li>Salesforce</li><li>GitHub</li><li>Snowflake</li></ul>
+<p>등이 있고, 전체적으로 400개 이상의 연결을 언급하고 있습니다.</p>
+<p>다만 연결 가능한 서비스와 권한은</p>
+<ul><li>요금제</li><li>조직 설정</li><li>계정 권한</li><li>출시 시점</li></ul>
+<p>등에 따라 달라질 수 있으므로 실제 계정에서 확인하는 것이 안전합니다.</p>
+<div class="added"><span class="tag">추가</span>이용 조건: Perplexity 공식 제품 페이지 기준 Computer는 Pro와 Max 구독자가 데스크톱·모바일·Slack·Microsoft 365에서 쓸 수 있으며, 작업 실행에 크레딧을 소모합니다. 출시 초기에는 Max(월 200달러) 전용이었고, 당시 Max에는 매월 10,000크레딧이 포함되었습니다.</div>
+
+<h3>Computer는 여러 AI를 조합한다</h3>
+<p>Computer는 하나의 AI 모델만 이용하는 구조가 아닙니다.</p>
+<p>작업 성격에 따라 여러 모델과 하위 에이전트를 조합하는 <strong>다중 모델 오케스트레이션</strong> 방식을 사용합니다.</p>
+<p>따라서</p>
+<blockquote><p>“Computer에는 AI가 정확히 19개 있다.”</p></blockquote>
+<p>처럼 외우는 것은 좋지 않습니다.</p>
+<p>출시 이후 모델 구성과 수는 계속 바뀔 수 있기 때문입니다.</p>
+<p>공부할 때는</p>
+<blockquote><p class="say"><strong>Computer = 여러 전문 AI를 작업에 맞게 조합하는 구조</strong></p></blockquote>
+<p>정도로 기억하는 것이 더 정확합니다.</p>
+<div class="note"><b>참고:</b> 19개는 2026년 2월 출시 발표 당시의 수치입니다. 이 구조는 더 나은 모델이 나오면 교체하도록 설계되어 있습니다.</div>
+
+<h3>Computer ≠ Deep Research</h3>
+<p>이것도 자주 혼동합니다.</p>
+<div class="two">
+<div class="box"><h4>Deep Research</h4><p style="margin:0">주로 <strong>깊이 조사하는 것</strong>이 목적입니다.</p></div>
+<div class="box"><h4>Computer</h4><p>조사를 넘어</p><ul><li>결과물 제작</li><li>앱 연결</li><li>도구 사용</li><li>반복 업무</li><li>일정 실행</li><li>변화 모니터링</li></ul><p style="margin:8px 0 0">등까지 포함합니다.</p></div>
+</div>
+<p>따라서</p>
+<blockquote><p class="say"><strong>Deep Research = 깊이 조사</strong><br><strong>Computer = 조사하고 실제 일까지 수행</strong></p></blockquote>
+<p>이라고 이해하는 것이 좋습니다.</p>
+
+<div class="wx"><table>
+<thead><tr><th>Perplexity 단계</th><th>깊이</th><th>자율성</th><th>결과물</th></tr></thead>
+<tbody>
+<tr><td>Search</td><td>빠른 출처 답변</td><td>낮음</td><td>출처 달린 답변</td></tr>
+<tr><td>Pro Search</td><td>더 많은 출처 수집·종합</td><td>낮음~중간</td><td>출처 달린 답변</td></tr>
+<tr><td>Research</td><td>주제를 자율적으로 깊이 탐색</td><td>중간</td><td>종합 조사 결과</td></tr>
+<tr><td>Computer</td><td>조사 + 실행</td><td>높음</td><td>보고서·표·발표자료·대시보드·웹사이트, 반복 작업</td></tr>
+</tbody></table></div>
+<p class="cap">추가 표: Perplexity 기능 단계 비교 (외부 분석 자료 기반, 요금제별 허용량은 별도)</p>
+
+<h3>Perplexity에도 로컬 컴퓨터용 기능이 있다</h3>
+<p>Perplexity는 <strong>Personal Computer</strong>라는 기능도 제공하고 있습니다.</p>
+<p>이는 Computer의 기능을 실제 사용자 컴퓨터로 확장하여</p>
+<ul><li>로컬 파일 편집</li><li>컴퓨터 조작</li><li>로컬 브라우징</li><li>로컬 앱 활용</li></ul>
+<p>등을 할 수 있게 하는 방향입니다.</p>
+<p>Perplexity는 2026년 4월 Mac용 Personal Computer를 공개했고, 당시 Max 이용자 제공 및 Pro 확대를 안내했습니다.</p>
+<div class="added verify"><span class="tag">확인 필요</span>“Pro 확대”는 이번 확인에서 검증되지 않았습니다. 2026년 5월 보도에서는 Personal Computer가 월 20달러 Pro 요금제에서는 제공되지 않는다고 했고, 2026년 7월 출시된 Windows판도 Max·Enterprise Max부터 제공되었습니다. 실제 계정에서 확인하는 것이 안전합니다.</div>
+<p>따라서</p>
+<blockquote><p>“Perplexity Computer는 무조건 웹에서만 움직인다.”</p></blockquote>
+<p>라고 이해하는 것도 현재는 정확하지 않습니다.</p>
+</section>
+
+<!-- 6 -->
+<section id="s6" data-toc="한눈에 비교">
+<h2><span class="n">6</span>세 서비스를 다시 한눈에 비교</h2>
+<div class="wx"><table>
+<thead><tr><th>구분</th><th class="gpt">ChatGPT</th><th class="cl">Claude</th><th class="px">Perplexity</th></tr></thead>
+<tbody>
+<tr><td>대화·탐색</td><td><strong>Chat</strong></td><td><strong>Claude Chat</strong></td><td><strong>Search</strong></td></tr>
+<tr><td>업무 위임</td><td><strong>Work</strong></td><td><strong>Cowork 기능 → Claude에 통합 중</strong></td><td><strong>Computer</strong></td></tr>
+<tr><td>핵심 질문</td><td>같이 생각할까?</td><td>Claude가 요청에 맞춰 판단</td><td>정보를 찾을까?</td></tr>
+<tr><td>핵심 실행</td><td>일을 맡길까?</td><td>필요한 경우 작업으로 전환</td><td>일을 실행할까?</td></tr>
+<tr><td>로컬 PC 파일</td><td>Work 데스크톱</td><td>Claude Desktop</td><td>Personal Computer</td></tr>
+<tr><td>웹 자동화</td><td>Work Browser</td><td>Browser / Claude in Chrome</td><td>Computer</td></tr>
+<tr><td>장기·반복 작업</td><td>가능</td><td>가능</td><td>가능</td></tr>
+<tr><td>특별 기능</td><td>Codex(개발)</td><td>Computer Use 등</td><td>다중 모델·연결 앱</td></tr>
+</tbody></table></div>
+<p class="cap">※ 실제 제공 기능은 플랜·계정·국가·조직 정책·단계적 배포에 따라 달라질 수 있습니다.</p>
+
+<h3>추가: 기능 지원 매트릭스</h3>
+<div class="wx"><table>
+<thead><tr><th>기능</th><th class="c gpt">ChatGPT Work</th><th class="c cl">Claude 업무형</th><th class="c px">Perplexity Computer</th></tr></thead>
+<tbody>
+<tr><td>문서·표·발표자료 제작</td><td class="c yes">●</td><td class="c yes">●</td><td class="c yes">●</td></tr>
+<tr><td>웹사이트·대시보드 제작</td><td class="c yes">● Site</td><td class="c yes">● Artifacts</td><td class="c yes">●</td></tr>
+<tr><td>외부 앱 연결</td><td class="c yes">●</td><td class="c yes">●</td><td class="c yes">● 400개+</td></tr>
+<tr><td>예약 실행</td><td class="c yes">●</td><td class="c yes">●</td><td class="c yes">●</td></tr>
+<tr><td>이벤트·변화 감지 실행</td><td class="c yes">● Gmail·Slack·GitHub</td><td class="c no">확인 안 됨</td><td class="c yes">● 변화 감시·알림</td></tr>
+<tr><td>컴퓨터 꺼도 계속 실행</td><td class="c yes">● 클라우드 Work</td><td class="c yes">● 클라우드 세션</td><td class="c yes">● 클라우드</td></tr>
+<tr><td>로컬 파일·앱 조작</td><td class="c yes">● 데스크톱 앱</td><td class="c yes">● 데스크톱 앱</td><td class="c part">◐ 별도 Personal Computer</td></tr>
+<tr><td>여러 회사 AI 모델 조합</td><td class="c no">—</td><td class="c no">—</td><td class="c yes">●</td></tr>
+</tbody></table></div>
+<p class="cap">● 공식 자료로 확인 / ◐ 별도 제품·상위 요금제 / “확인 안 됨” = 이번 조사에서 공식 근거를 찾지 못함 (없다는 뜻은 아님)</p>
+</section>
+
+<!-- 7 -->
+<section id="s7" data-toc="로컬 vs 클라우드">
+<h2><span class="n">7</span>“로컬 vs 클라우드”도 함께 이해하자</h2>
+<p>앞으로 에이전트형 AI를 이해할 때 매우 중요한 두 번째 기준입니다.</p>
+<div class="two">
+<div class="box">
+<h4>클라우드 실행</h4>
+<p>AI 회사의 서버에서 작업합니다.</p>
+<p><strong>장점:</strong></p>
+<ul><li>내 컴퓨터를 꺼도 계속할 수 있음</li><li>휴대폰에서 진행 상황 확인 가능</li><li>여러 기기에서 이어서 작업 가능</li></ul>
+</div>
+<div class="box">
+<h4>로컬 접근</h4>
+<p>내 PC의</p>
+<ul><li>폴더</li><li>파일</li><li>프로그램</li><li>브라우저</li><li>화면</li></ul>
+<p>등을 사용합니다.</p>
+<p><strong>장점:</strong></p>
+<ul><li>실제 컴퓨터 업무와 직접 연결 가능</li></ul>
+<p><strong>주의:</strong></p>
+<ul><li>개인정보와 권한 관리가 훨씬 중요함</li></ul>
+</div>
+</div>
+
+<figure>
+<div class="svgbox">
+<svg viewBox="0 0 720 330" role="img" aria-labelledby="mxT mxD">
+<title id="mxT">대화형·위임형과 클라우드·로컬 2축 지도</title>
+<desc id="mxD">가로축은 대화형에서 위임형, 세로축은 클라우드에서 로컬. 대화형 클라우드에는 Chat과 Search, 위임형 클라우드에는 Work 웹, Cowork 클라우드, Computer, 위임형 로컬에는 Work 데스크톱, Claude Desktop, Personal Computer가 있다.</desc>
+<line x1="80" y1="290" x2="700" y2="290" class="ink" stroke-width="1.5"/>
+<line x1="80" y1="290" x2="80" y2="20" class="ink" stroke-width="1.5"/>
+<line x1="390" y1="30" x2="390" y2="290" class="ln" stroke-dasharray="4 4"/>
+<line x1="80" y1="155" x2="700" y2="155" class="ln" stroke-dasharray="4 4"/>
+<text x="235" y="315" font-size="14" text-anchor="middle" font-weight="700">대화형 (사람 주도)</text>
+<text x="545" y="315" font-size="14" text-anchor="middle" font-weight="700">위임형 (AI 실행 주도)</text>
+<text x="40" y="225" font-size="14" text-anchor="middle" font-weight="700" transform="rotate(-90 40 225)">클라우드</text>
+<text x="40" y="90" font-size="14" text-anchor="middle" font-weight="700" transform="rotate(-90 40 90)">로컬 PC</text>
+<!-- cloud conversational -->
+<text x="235" y="200" font-size="14" text-anchor="middle" fill="#0E7C6B" font-weight="700">ChatGPT Chat</text>
+<text x="235" y="224" font-size="14" text-anchor="middle" fill="#A2661A" font-weight="700">Claude Chat</text>
+<text x="235" y="248" font-size="14" text-anchor="middle" fill="#1F6FB2" font-weight="700">Perplexity Search</text>
+<!-- cloud agent -->
+<text x="545" y="200" font-size="14" text-anchor="middle" fill="#0E7C6B" font-weight="700">Work (웹·모바일)</text>
+<text x="545" y="224" font-size="14" text-anchor="middle" fill="#A2661A" font-weight="700">Cowork 클라우드 세션</text>
+<text x="545" y="248" font-size="14" text-anchor="middle" fill="#1F6FB2" font-weight="700">Computer</text>
+<!-- local agent -->
+<text x="545" y="70" font-size="14" text-anchor="middle" fill="#0E7C6B" font-weight="700">Work (데스크톱 앱)</text>
+<text x="545" y="94" font-size="14" text-anchor="middle" fill="#A2661A" font-weight="700">Claude Desktop 로컬 접근</text>
+<text x="545" y="118" font-size="14" text-anchor="middle" fill="#1F6FB2" font-weight="700">Personal Computer</text>
+<!-- local conversational -->
+<text x="235" y="94" font-size="13.5" text-anchor="middle" class="mut">대화형으로 PC를 직접 조작하는</text>
+<text x="235" y="114" font-size="13.5" text-anchor="middle" class="mut">방식은 드묾</text>
+</svg>
+</div>
+<figcaption>추가 도식: “대화 vs 위임” × “클라우드 vs 로컬” 2축 지도. 앞으로 새 기능이 나와도 이 지도에 올려놓으면 위치를 파악할 수 있습니다.</figcaption>
+</figure>
+<div class="note"><b>한 가지 더:</b> “로컬에서 실행”이 곧 “데이터가 밖으로 안 나간다”는 뜻은 아닙니다. ChatGPT는 로컬 작업이라도 메시지와 작업 맥락이 클라우드에 저장될 수 있다고 안내하고, Claude는 10월 6일 이후 작업에 필요한 파일의 사본을 클라우드로 가져간다고 안내합니다.</div>
+</section>
+
+<!-- 8 -->
+<section id="s8" data-toc="학교 업무로 비교">
+<h2><span class="n">8</span>학교 업무로 비교하면</h2>
+<p>아래 사례를 눌러 보면 어떤 도구가 맞는지와 그 이유가 나옵니다.</p>
+<div class="picker" id="picker">
+<div class="opts" role="group" aria-label="사례 선택"></div>
+<div class="out" aria-live="polite"></div>
+</div>
+
+<div class="wx"><table>
+<thead><tr><th>사례</th><th>요청</th><th>알맞은 도구</th></tr></thead>
+<tbody>
+<tr><td>①</td><td>“고교학점제가 뭐야?”</td><td>ChatGPT <strong>Chat</strong> / Claude</td></tr>
+<tr><td>②</td><td>“교육부에서 발표한 최신 고교학점제 자료를 찾아 출처와 함께 설명해 줘.”</td><td>Perplexity <strong>Search</strong></td></tr>
+<tr><td>③</td><td>“이 학부모 안내문을 친절하게 고쳐 줘.”</td><td>ChatGPT <strong>Chat</strong> / Claude</td></tr>
+<tr><td>④</td><td>“설문 Excel 3개와 작년 보고서를 분석해서 올해 결과보고서와 PPT를 만들어 줘.”</td><td>ChatGPT <strong>Work</strong> / Claude의 업무형 실행</td></tr>
+<tr><td>⑤</td><td>“20개 대학의 2028 입학전형을 조사하고 변경사항 표와 보고서를 만들어 줘.”</td><td>ChatGPT <strong>Work</strong> / Perplexity <strong>Computer</strong> / Claude의 업무형 실행</td></tr>
+<tr><td>⑥</td><td>“내 컴퓨터의 이 폴더에 있는 파일을 읽고 분류하고 필요한 파일을 새로 만들어 줘.”</td><td>ChatGPT <strong>Work 데스크톱</strong> → Claude <strong>Desktop 기반 업무</strong> → Perplexity <strong>Personal Computer</strong></td></tr>
+</tbody></table></div>
+<p>즉, 현재는 세 회사 모두 <strong>클라우드 작업과 로컬 PC 작업의 경계가 점점 넓어지고 있습니다.</strong></p>
+</section>
+
+<!-- 9 -->
+<section id="s9" data-toc="흔한 오해 바로잡기">
+<h2><span class="n">9</span>꼭 바로잡아야 할 흔한 오해</h2>
+<div class="wx"><table>
+<thead><tr><th>흔한 오해</th><th>정확한 이해</th></tr></thead>
+<tbody>
+<tr><td>Chat은 파일을 못 쓴다</td><td>Chat도 파일과 연결 서비스를 사용할 수 있다</td></tr>
+<tr><td>어려운 일이면 무조건 Work다</td><td>난이도보다 <strong>업무 주도권을 얼마나 AI에게 넘기는가</strong>가 중요하다</td></tr>
+<tr><td>파일을 만들려면 Work를 써야 한다</td><td>Chat에서도 결과물을 만들 수 있다</td></tr>
+<tr><td>Work = Tasks</td><td>Work는 업무 실행, Tasks는 일정·조건에 따른 자동화</td></tr>
+<tr><td>Cowork = Artifacts</td><td>Cowork는 업무 실행, Artifacts는 결과물을 보고 다루는 공간</td></tr>
+<tr><td>Projects = Cowork</td><td>Projects는 관련 자료와 지침을 묶는 작업 공간</td></tr>
+<tr><td>Claude는 Chat/Cowork가 항상 따로 있다</td><td>현재 Pro·Max부터 <strong>하나의 Claude로 통합 중</strong></td></tr>
+<tr><td>Cowork는 데스크톱에서만 된다</td><td>웹·모바일에서도 가능. 단 로컬 PC 접근에는 Desktop이 필요</td></tr>
+<tr><td>Computer = Deep Research</td><td>Research는 조사 중심, Computer는 조사 후 실행까지</td></tr>
+<tr><td>출처가 붙으면 무조건 맞다</td><td>출처 원문이 실제 주장과 숫자를 뒷받침하는지 확인해야 한다</td></tr>
+<tr><td><em>(추가)</em> 같은 ChatGPT니까 Chat과 Work의 모델도 같다</td><td>Work·Codex 전용 모델(GPT-6 Sol·Luna 등)이 있고, 사용량도 별도로 차감된다</td></tr>
+<tr><td><em>(추가)</em> 로컬에서 돌리면 데이터가 밖으로 안 나간다</td><td>로컬 작업도 메시지·맥락이 클라우드에 저장될 수 있고, 필요한 파일 사본이 전송될 수 있다</td></tr>
+<tr><td><em>(추가)</em> 커넥터를 연결하면 무엇이든 수정할 수 있다</td><td>Claude의 기본 Google Drive·M365 커넥터는 읽기·검색 전용이다. 커넥터마다 권한 설명을 확인해야 한다</td></tr>
+</tbody></table></div>
+
+<h3>추가: 스스로 점검 퀴즈</h3>
+<p>맞으면 O, 틀리면 X를 누르세요.</p>
+<div class="quiz" id="quiz"></div>
+<div class="score" id="score" aria-live="polite"></div>
+<button class="btn" type="button" id="quizReset">퀴즈 다시 풀기</button>
+</section>
+
+<!-- 10 -->
+<section id="s10" data-toc="계획 → 실행 → 검수">
+<h2><span class="n">10</span>가장 중요한 사용법: 계획 → 실행 → 검수</h2>
+<p>에이전트형 AI를 가장 안전하게 쓰는 방법입니다.</p>
+
+<figure>
+<div class="svgbox">
+<svg viewBox="0 0 720 150" role="img" aria-labelledby="hlT hlD">
+<title id="hlT">계획, 실행, 검수 3단계</title>
+<desc id="hlD">사람이 계획하고, AI가 실행하고, 사람이 검수와 승인을 한다. 검수에서 문제가 있으면 다시 실행으로 돌아간다.</desc>
+<rect x="20" y="30" width="190" height="70" rx="12" fill="none" stroke="#1D3A6E" stroke-width="2"/>
+<text x="115" y="60" font-size="15" font-weight="700" text-anchor="middle">① 사람이 계획</text>
+<text x="115" y="82" font-size="13" text-anchor="middle" class="mut">목표·자료·기준·권한</text>
+<rect x="265" y="30" width="190" height="70" rx="12" fill="#1D3A6E" fill-opacity=".12" stroke="#1D3A6E" stroke-width="2"/>
+<text x="360" y="60" font-size="15" font-weight="700" text-anchor="middle">② AI가 실행</text>
+<text x="360" y="82" font-size="13" text-anchor="middle" class="mut">검색·분석·작성·웹 작업</text>
+<rect x="510" y="30" width="190" height="70" rx="12" fill="none" stroke="#1D3A6E" stroke-width="2"/>
+<text x="605" y="60" font-size="15" font-weight="700" text-anchor="middle">③ 사람이 검수·승인</text>
+<text x="605" y="82" font-size="13" text-anchor="middle" class="mut">사실·숫자·개인정보</text>
+<line x1="212" y1="65" x2="258" y2="65" stroke="#1D3A6E" stroke-width="2" marker-end="url(#ar2)"/>
+<line x1="457" y1="65" x2="503" y2="65" stroke="#1D3A6E" stroke-width="2" marker-end="url(#ar2)"/>
+<path d="M605,102 C605,140 360,140 360,104" fill="none" stroke="#B23A3A" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#ar3)"/>
+<text x="482" y="146" font-size="12.5" text-anchor="middle" fill="#B23A3A">문제 발견 시 다시 실행</text>
+<defs>
+<marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1D3A6E"/></marker>
+<marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#B23A3A"/></marker>
+</defs>
+</svg>
+</div>
+<figcaption>추가 도식: Human-in-the-Loop 흐름</figcaption>
+</figure>
+
+<h3>① 사람이 계획한다</h3>
+<p>먼저 정합니다.</p>
+<ul><li>무엇을 만들 것인가?</li><li>어떤 자료를 쓸 것인가?</li><li>어떤 자료는 쓰지 않을 것인가?</li><li>어떤 기준으로 판단할 것인가?</li></ul>
+<h3>② AI가 실행한다</h3>
+<p>AI가</p>
+<ul><li>검색</li><li>자료 읽기</li><li>분석</li><li>계산</li><li>문서 작성</li><li>표 작성</li><li>그래프 제작</li><li>웹 작업</li></ul>
+<p>등을 수행합니다.</p>
+<h3>③ 사람이 검수·승인한다</h3>
+<p>최종적으로 사람이</p>
+<ul><li>사실</li><li>숫자</li><li>날짜</li><li>출처</li><li>개인정보</li><li>공식 기록</li><li>외부 발송 내용</li></ul>
+<p>을 확인합니다.</p>
+<p>이것을 흔히 <strong>Human-in-the-Loop</strong>, 즉 <strong>사람이 중요한 판단과 승인 과정에 남아 있는 구조</strong>라고 부를 수 있습니다.</p>
+<p>Claude도 새 업무형 경험에서 Auto와 Manual 등 승인 수준을 제공하며, 실제 영향을 주는 메시지 발송이나 중요 파일 변경 같은 작업은 사용자가 가까이에서 검토하도록 안내하고 있습니다.</p>
+<div class="added"><span class="tag">추가</span>세 회사의 승인 장치 비교: ChatGPT Work는 진행 상황을 보면서 질문에 답하고, 방향을 바꾸고, 중요한 행동을 승인할 수 있습니다(웹·모바일에서는 음성 승인 불가, 화면 버튼으로 승인). Claude Cowork는 승인 모드가 세 가지이며, Auto 모드는 커넥터·플러그인·내장 브라우저·Claude in Chrome 전체에 적용됩니다. Perplexity Computer는 작업 중에도 계속 지시하고 방향을 바꿀 수 있습니다.</div>
+</section>
+
+<!-- 11 -->
+<section id="s11" data-toc="행동의 위험도">
+<h2><span class="n">11</span>학교에서는 행동의 위험도를 나누자</h2>
+<div class="wx"><table>
+<thead><tr><th>위험</th><th>예</th><th>원칙</th></tr></thead>
+<tbody>
+<tr><td>🟢 <strong>낮음</strong></td><td>공개 자료 조사, 수업 아이디어, 예시 문장</td><td>AI에게 맡겨도 됨</td></tr>
+<tr><td>🟡 <strong>중간</strong></td><td>내부 보고서 초안, 통계 분석, 그래프 제작</td><td>원자료·숫자·출처 확인</td></tr>
+<tr><td>🔴 <strong>높음</strong></td><td>학생 정보 수정, 성적 처리, 메일 발송, 신청서 제출, 파일 삭제</td><td><strong>사람이 실행 전·후 반드시 확인</strong></td></tr>
+</tbody></table></div>
+
+<h3>추가: 위험도 × 권한 설정 매칭</h3>
+<div class="wx"><table>
+<thead><tr><th>위험</th><th>연결할 자료</th><th>승인 설정</th><th>실행 위치</th></tr></thead>
+<tbody>
+<tr><td>🟢 낮음</td><td>공개 웹 자료, 비식별 자료</td><td>자동 진행 가능</td><td>클라우드</td></tr>
+<tr><td>🟡 중간</td><td>업무용 복사본 폴더 (원본 아님)</td><td>주요 단계마다 확인</td><td>클라우드 또는 로컬</td></tr>
+<tr><td>🔴 높음</td><td>연결하지 않는 것이 원칙. 필요하면 최소 범위의 별도 폴더</td><td>수동 승인 (행동마다)</td><td>학교·교육청 지침 확인 후 결정</td></tr>
+</tbody></table></div>
+<p class="cap">추가 표: 각 사의 안전 안내(허용 폴더 최소화, 테스트용 사본 폴더 사용, 중요한 일은 수동 승인)를 학교 상황에 맞게 정리한 것입니다.</p>
+
+<p>학교 업무에서 특히 중요한 것은</p>
+<blockquote><p class="say"><strong>AI가 무엇을 만들었느냐보다 어디로 보내고, 무엇을 수정하고, 어떤 개인정보를 다루느냐</strong></p></blockquote>
+<p>입니다.</p>
+</section>
+
+<!-- 12 -->
+<section id="s12" data-toc="출처 ≠ 사실">
+<h2><span class="n">12</span>“출처가 있다”와 “사실이다”는 다르다</h2>
+<p>특히 Perplexity Search나 웹 조사형 AI를 사용할 때 꼭 기억해야 합니다.</p>
+<p>AI가 출처를 붙였다고 해서 자동으로 사실이 되는 것은 아닙니다.</p>
+<p>다음을 다시 확인해야 합니다.</p>
+<ol>
+<li>출처가 질문과 실제로 관련 있는가?</li>
+<li>AI가 쓴 숫자가 원문에도 있는가?</li>
+<li>자료의 발표 날짜가 맞는가?</li>
+<li>최신 자료인가?</li>
+<li>1차 자료인가?</li>
+</ol>
+<p>입시·교육정책에서는 가능하면</p>
+<div class="flow"><span><strong>교육부</strong></span><i>→</i><span><strong>교육청</strong></span><i>→</i><span><strong>대학 입학처</strong></span><i>→</i><span><strong>공식 시행계획·모집요강</strong></span></div>
+<p>등 원문을 먼저 확인하는 것이 좋습니다.</p>
+
+<h3>추가: 출처 검증 체크리스트</h3>
+<div class="box" id="checklist">
+<label style="display:flex;gap:8px;align-items:flex-start;margin:4px 0"><input type="checkbox"> 출처 링크를 직접 열어 보았다</label>
+<label style="display:flex;gap:8px;align-items:flex-start;margin:4px 0"><input type="checkbox"> 원문에 그 숫자·문장이 실제로 있다</label>
+<label style="display:flex;gap:8px;align-items:flex-start;margin:4px 0"><input type="checkbox"> 발표 날짜와 학년도(예: 2027 vs 2028)가 맞다</label>
+<label style="display:flex;gap:8px;align-items:flex-start;margin:4px 0"><input type="checkbox"> 더 최신 자료가 나오지 않았다</label>
+<label style="display:flex;gap:8px;align-items:flex-start;margin:4px 0"><input type="checkbox"> 기사·블로그가 아닌 1차 자료로 확인했다</label>
+<p id="checkOut" style="margin:10px 0 0;font-weight:700">0 / 5 확인</p>
+</div>
+</section>
+
+<!-- 13 -->
+<section id="s13" data-toc="일을 잘 맡기는 7가지">
+<h2><span class="n">13</span>에이전트에게 일을 잘 맡기는 7가지</h2>
+<p>단순히</p>
+<blockquote><p>“잘 만들어 줘.”</p></blockquote>
+<p>라고 하면 안 됩니다.</p>
+<p>다음 일곱 가지를 알려주면 훨씬 정확해집니다.</p>
+<div class="wx"><table>
+<thead><tr><th>요소</th><th>질문</th></tr></thead>
+<tbody>
+<tr><td><strong>① 목표</strong></td><td>무엇을 완성할 것인가?</td></tr>
+<tr><td><strong>② 자료</strong></td><td>어떤 파일·폴더·사이트를 사용할 것인가?</td></tr>
+<tr><td><strong>③ 범위</strong></td><td>무엇을 포함하고 제외할 것인가?</td></tr>
+<tr><td><strong>④ 기준</strong></td><td>어떤 출처와 판단 기준을 사용할 것인가?</td></tr>
+<tr><td><strong>⑤ 결과물</strong></td><td>Word, Excel, PPT, PDF, 웹페이지 중 무엇인가?</td></tr>
+<tr><td><strong>⑥ 형식</strong></td><td>분량·표·그래프·문체 등은 어떻게 할 것인가?</td></tr>
+<tr><td><strong>⑦ 승인</strong></td><td>무엇을 하기 전에는 반드시 나에게 물어볼 것인가?</td></tr>
+</tbody></table></div>
+<p>예를 들면:</p>
+<blockquote><p>“첨부한 설문 Excel 3개와 작년 결과보고서를 이용해 올해 진로교육 운영 결과보고서를 만들어 줘. 학생 개인 식별 정보는 사용하지 말고, 만족도 변화와 계열별 응답만 분석해 줘. 표 3개와 그래프 2개를 넣고 모든 수치는 원자료와 다시 검증해 줘. 외부 자료가 필요하면 교육부·교육청 공식 자료만 사용해 줘. 파일 삭제·외부 공유·메일 발송은 하지 마.”</p></blockquote>
+<p>이 정도면 단순 프롬프트가 아니라 <strong>업무 지시서</strong>에 가깝습니다.</p>
+
+<h3>추가: 업무 지시서 만들기 연습</h3>
+<p>칸을 채우면 아래에 지시문이 조립됩니다. 복사해서 바로 쓸 수 있습니다.</p>
+<div class="builder" id="builder">
+<label>① 목표<input data-k="목표" placeholder="예: 올해 진로교육 운영 결과보고서 작성"></label>
+<label>② 자료<input data-k="자료" placeholder="예: 첨부한 설문 Excel 3개, 작년 결과보고서"></label>
+<label>③ 범위<input data-k="범위" placeholder="예: 만족도 변화와 계열별 응답만. 개인 식별 정보 제외"></label>
+<label>④ 기준<input data-k="기준" placeholder="예: 외부 자료는 교육부·교육청 공식 자료만"></label>
+<label>⑤ 결과물<input data-k="결과물" placeholder="예: Word 보고서 1개, PPT 10장"></label>
+<label>⑥ 형식<input data-k="형식" placeholder="예: 표 3개, 그래프 2개, 공문체"></label>
+<label>⑦ 승인<textarea data-k="승인" placeholder="예: 파일 삭제·외부 공유·메일 발송은 하지 말고, 필요하면 먼저 물어볼 것"></textarea></label>
+<output id="bOut">칸을 채우면 여기에 지시서가 나타납니다.</output>
+<div class="row"><button class="btn" type="button" id="bCopy">지시서 복사</button><span id="bMsg" style="font-size:14px;color:var(--muted)"></span></div>
+</div>
+</section>
+
+<!-- 14 -->
+<section id="s14" data-toc="에이전트의 오류 수정">
+<h2><span class="n">14</span>에이전트가 스스로 오류를 고칠 수도 있지만…</h2>
+<p>Work·Claude 업무형 기능·Computer 같은 에이전트는 작업 중</p>
+<div class="flow"><span>실행</span><i>→</i><span>결과 확인</span><i>→</i><span>오류 발견</span><i>→</i><span>수정</span><i>→</i><span>다시 실행</span></div>
+<p>과정을 반복할 수 있습니다.</p>
+<p>예를 들어 코드를 실행하다 오류가 나면 로그를 보고 다시 수정하거나, 자료가 부족하면 다른 자료를 찾아볼 수 있습니다.</p>
+<p>다만 이것을</p>
+<blockquote><p>“Chat은 스스로 오류를 못 고치고 에이전트만 고친다.”</p></blockquote>
+<p>라고 설명하면 지나친 단순화입니다.</p>
+<p>Chat도 대화 과정에서 오류를 수정할 수 있습니다.</p>
+<p>차이는 <strong>오류 수정 능력의 존재 여부</strong>라기보다,</p>
+<blockquote><p class="say"><strong>에이전트형 AI가 실행 과정 안에서 이런 반복 작업을 더 자율적으로 이어갈 수 있다</strong></p></blockquote>
+<p>는 데 있습니다.</p>
+<div class="note"><b>주의:</b> 스스로 고치는 과정이 길어질수록 중간 단계의 잘못된 가정이 최종 결과물까지 이어질 수 있습니다. 또 반복이 많을수록 사용량·크레딧 소모도 커집니다.</div>
+</section>
+
+<!-- 15 -->
+<section id="s15" data-toc="MCP란?">
+<h2><span class="n">15</span>왜 MCP라는 말을 자주 듣게 될까?</h2>
+<p>최근 AI가</p>
+<ul><li>Google Drive</li><li>Gmail</li><li>Slack</li><li>GitHub</li><li>사내 시스템</li><li>각종 데이터베이스</li></ul>
+<p>같은 외부 서비스와 연결되면서 <strong>MCP(Model Context Protocol)</strong>라는 용어를 자주 보게 됩니다.</p>
+<p>쉽게 말하면</p>
+<blockquote><p class="say"><strong>AI와 외부 도구가 서로 정보를 주고받을 수 있게 연결하는 표준 방식 중 하나</strong></p></blockquote>
+<p>입니다.</p>
+<div class="added"><span class="tag">추가</span>MCP는 Anthropic이 2024년 11월 오픈 표준으로 공개한 규격입니다. 쉽게 말해 “AI용 USB 포트”처럼 AI 앱과 외부 도구를 같은 규칙으로 꽂을 수 있게 합니다. Claude의 “로컬 커넥터”, “로컬 MCP 서버를 포함한 플러그인”이라는 표현이 이것과 관련 있으며, 이런 로컬 연결은 데스크톱 앱에서만 동작합니다.</div>
+<p>다만 주의할 점이 있습니다.</p>
+<blockquote><p>Work·Cowork·Computer의 모든 연결이 반드시 MCP로 이루어지는 것은 아닙니다.</p></blockquote>
+<p>회사별 자체 커넥터·플러그인·API 등 다양한 연결 방식이 함께 사용됩니다.</p>
+<p>따라서</p>
+<div class="wrongright">
+<div class="w"><b>틀림</b>“세 서비스가 외부 앱을 사용하는 이유는 모두 MCP 때문이다.”</div>
+<div class="r"><b>맞음</b>“MCP를 포함한 여러 연결 기술 덕분에 AI가 외부 서비스와 함께 일할 수 있게 되고 있다.”</div>
+</div>
+<p>라고 이해하는 것이 정확합니다.</p>
+</section>
+
+<!-- 16 -->
+<section id="s16" data-toc="AI 사용법의 변화">
+<h2><span class="n">16</span>결국 AI 사용법 자체가 바뀌고 있다</h2>
+<div class="two">
+<div class="box">
+<h4>예전에는 이랬습니다.</h4>
+<p><strong>사람</strong></p>
+<div class="flow" style="flex-direction:column;align-items:flex-start"><span>자료 찾기</span><i>↓</i><span>AI에게 질문</span><i>↓</i><span>다시 파일 열기</span><i>↓</i><span>AI에게 요약 요청</span><i>↓</i><span>Excel 정리</span><i>↓</i><span>AI에게 문장 요청</span><i>↓</i><span>PPT 만들기</span></div>
+<p>즉,</p>
+<p style="margin:0"><strong>사람이 일을 하고 AI가 중간중간 도왔다.</strong></p>
+</div>
+<div class="box">
+<h4>이제는 점점 이렇게 바뀌고 있습니다.</h4>
+<p><strong>사람</strong>: <strong>목표·자료·기준·권한 설정</strong></p>
+<p style="margin:0">↓</p>
+<p><strong>AI</strong></p>
+<div class="flow" style="flex-direction:column;align-items:flex-start"><span>자료 조사</span><i>→</i><span>파일 확인</span><i>→</i><span>분석</span><i>→</i><span>계산</span><i>→</i><span>도구 사용</span><i>→</i><span>결과물 제작</span><i>→</i><span>오류 수정</span></div>
+<p style="margin:0">↓</p>
+<p style="margin:0"><strong>사람</strong>: <strong>검수·승인·최종 판단</strong></p>
+</div>
+</div>
+<p>즉,</p>
+<blockquote><p class="say"><strong>사람은 목표와 기준을 정하고, AI는 실행하며, 최종 책임과 판단은 사람이 맡는 구조</strong></p></blockquote>
+<p>로 바뀌고 있습니다.</p>
+
+<div class="wx"><table>
+<thead><tr><th>단계</th><th>예전: 사람이 하던 일</th><th>지금: 사람이 하는 일</th></tr></thead>
+<tbody>
+<tr><td>시작</td><td>자료 찾기</td><td>목표·자료·기준·권한 정하기</td></tr>
+<tr><td>중간</td><td>파일 열고 옮기고 AI에 반복 질문</td><td>진행 상황 보고 방향 수정·승인</td></tr>
+<tr><td>끝</td><td>Excel 정리, PPT 직접 제작</td><td>검수·승인·최종 판단</td></tr>
+<tr><td>핵심 역량</td><td>질문 잘하기</td><td>맡길 범위와 확인할 지점 정하기</td></tr>
+</tbody></table></div>
+<p class="cap">추가 표: 사람의 역할 변화</p>
+</section>
+
+<!-- 17 -->
+<section id="s17" data-toc="최종 암기법">
+<h2><span class="n">17</span>가장 쉬운 최종 암기법</h2>
+<div class="cards">
+<div class="card" style="--c:var(--gpt)">
+<h4>ChatGPT</h4>
+<p class="k">🗣️ Chat</p><p>“나와 이야기하면서 해결해 줘.”</p>
+<p class="k">🧑‍💼 Work</p><p>“목표는 이것이야. 필요한 일을 해서 결과물까지 만들어 줘.”</p>
+<p class="k">💻 Codex</p><p>“이 프로그램 개발 일을 맡아 줘.”</p>
+</div>
+<div class="card" style="--c:var(--claude)">
+<h4>Claude</h4>
+<p class="k">예전</p><p>🗣️ Chat ↔ 🧑‍💼 Cowork</p>
+<p class="k">현재</p><p><strong>그냥 Claude에게 무엇을 원하는지 말한다. Claude가 답할지, 작업할지 판단하는 방향으로 통합 중</strong></p>
+<p style="font-family:var(--sans);font-size:14px;color:var(--muted);margin-top:8px">이것이 2026년 9월 말 가장 중요한 변화입니다.</p>
+</div>
+<div class="card" style="--c:var(--pplx)">
+<h4>Perplexity</h4>
+<p class="k">🔎 Search</p><p>“인터넷에서 찾아서 출처와 함께 알려 줘.”</p>
+<p class="k">🧑‍💼 Computer</p><p>“찾는 것에서 끝내지 말고 필요한 일을 해서 결과물을 완성해 줘.”</p>
+</div>
+</div>
+</section>
+
+<!-- final -->
+<section id="s18" data-toc="마지막 한 문장">
+<h2><span class="n">✓</span>마지막 한 문장</h2>
+<div class="final">
+<p class="big"><strong>AI를 잘 쓰는 사람은 더 이상 질문만 잘하는 사람이 아니라,<br>AI에게 ‘무엇을 맡기고, 어디까지 맡기고, 무엇은 사람이 확인할지’를 잘 정하는 사람입니다.</strong></p>
+<p>그리고 실전에서는 이것만 기억하면 됩니다.</p>
+<ol class="steps">
+<li><strong>먼저 생각과 방향을 잡는다</strong></li>
+<li><strong>필요한 실행을 AI에게 맡긴다</strong></li>
+<li><strong>중요한 결과와 행동은 사람이 검수·승인한다.</strong></li>
+</ol>
+<p style="margin:16px 0 0">이 원칙은 ChatGPT, Claude, Perplexity의 화면이나 제품 이름이 앞으로 바뀌더라도 계속 사용할 수 있습니다.</p>
+</div>
+</section>
+
+<!-- sources -->
+<section id="s19" class="src" data-toc="참고 자료">
+<h2><span class="n">§</span>참고 자료 (2026년 9월 30일 확인)</h2>
+<ol>
+<li>OpenAI Help Center, “ChatGPT Work and Codex” — <a href="https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex">help.openai.com/en/articles/20001275</a></li>
+<li>OpenAI Help Center, “ChatGPT — Release Notes” (Box·Dropbox·SharePoint, 2026.9) — <a href="https://help.openai.com/en/articles/6825453">help.openai.com/en/articles/6825453</a></li>
+<li>DEV Community, “ChatGPT Work vs Chat” (2026.7.9 발표) — <a href="https://dev.to/jamilxt/chatgpt-work-vs-chat-what-openais-new-agent-mode-actually-adds-and-whether-it-is-safe-18hm">dev.to</a></li>
+<li>Claude Help Center, “Use Claude Cowork on web, desktop, and mobile” — <a href="https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile">support.claude.com/en/articles/15520349</a></li>
+<li>Claude Help Center, “Get started with Claude Cowork” — <a href="https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork">support.claude.com/en/articles/13345190</a></li>
+<li>Claude Help Center, “Schedule recurring tasks in Claude Cowork” — <a href="https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork">support.claude.com/en/articles/13854387</a></li>
+<li>Claude Help Center, “Assign tasks from anywhere in Claude Cowork” (Dispatch) — <a href="https://support.claude.com/en/articles/13947068-assign-tasks-from-anywhere-in-claude-cowork">support.claude.com/en/articles/13947068</a></li>
+<li>Claude Academy, “Setting up Claude Cowork” — <a href="https://academy.claude.com/courses/introduction-to-claude-cowork/getting-set-up">academy.claude.com</a></li>
+<li>Perplexity Academy, “Search vs Computer” — <a href="https://www.perplexity.ai/hub/academy/search-vs-computer">perplexity.ai/hub/academy/search-vs-computer</a></li>
+<li>Perplexity, “Computer” 제품 페이지 — <a href="https://www.perplexity.ai/products/computer">perplexity.ai/products/computer</a></li>
+<li>Business Standard, Perplexity Computer 출시 보도 (2026.2.26) — <a href="https://www.business-standard.com/technology/tech-news/aravind-srinivas-perplexity-computer-ai-digital-worker-projects-details-126022600193_1.html">business-standard.com</a></li>
+<li>SiliconANGLE, Personal Computer Windows판 (2026.7.28) — <a href="https://siliconangle.com/2026/07/28/perplexity-brings-personal-computer-ai-agent-windows/">siliconangle.com</a></li>
+<li>Gadget Hacks, Personal Computer for Mac 해설 (2026.5) — <a href="https://apple.gadgethacks.com/news/perplexity-personal-computer-for-mac-explained-features-cost-and-trust-questions/">apple.gadgethacks.com</a></li>
+<li>Data Studios, Perplexity Research vs Pro Search vs Computer — <a href="https://www.datastudios.org/post/perplexity-ai-deep-research-how-it-works-limitations-and-use-cases-for-professionals">datastudios.org</a></li>
+</ol>
+<p class="cap" style="margin-top:8px">요금제·모델명·제공 범위는 자주 바뀝니다. 중요한 결정 전에는 각 회사 도움말을 다시 확인하세요.</p>
+</section>
+
+</div>
+</main>
+</div>
+
+<script>
+(function(){
+  // TOC
+  const secs=[...document.querySelectorAll('section[data-toc]')];
+  const toc=document.getElementById('tocList'), tm=document.getElementById('tocMobile');
+  secs.forEach(s=>{
+    const li=document.createElement('li');
+    li.innerHTML='<a href="#'+s.id+'">'+s.dataset.toc+'</a>';
+    toc.appendChild(li);
+    const li2=document.createElement('li');
+    li2.innerHTML='<a href="#'+s.id+'">'+s.dataset.toc+'</a>';
+    tm.appendChild(li2);
+  });
+  const links=[...toc.querySelectorAll('a')];
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  secs.forEach(s=>io.observe(s));
+
+  // progress
+  const bar=document.getElementById('progress');
+  const onScroll=()=>{
+    const h=document.documentElement;
+    const p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+    bar.style.width=(p*100)+'%';
+  };
+  document.addEventListener('scroll',onScroll,{passive:true});
+
+  // theme
+  const root=document.documentElement;
+  try{const t=localStorage.getItem('aiStudyTheme'); if(t) root.dataset.theme=t;}catch(e){}
+  document.getElementById('themeBtn').addEventListener('click',()=>{
+    const dark = root.dataset.theme ? root.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light':'dark';
+    try{localStorage.setItem('aiStudyTheme',root.dataset.theme);}catch(e){}
+  });
+
+  // scenario picker
+  const cases=[
+    {k:'①',q:'“고교학점제가 뭐야?”',a:'ChatGPT Chat / Claude',w:'개념 설명이 결과물입니다. 한 번 묻고, 필요하면 “더 쉽게”, “표로” 하며 사람이 대화를 이끌면 됩니다.'},
+    {k:'②',q:'“교육부에서 발표한 최신 고교학점제 자료를 찾아 출처와 함께 설명해 줘.”',a:'Perplexity Search',w:'최신 자료와 출처가 핵심입니다. 답 자체가 결과물이고, 출처 달린 한 번의 답으로 충분합니다. 단, 출처 원문은 직접 확인합니다.'},
+    {k:'③',q:'“이 학부모 안내문을 친절하게 고쳐 줘.”',a:'ChatGPT Chat / Claude',w:'문장을 주고받으며 다듬는 일입니다. 사람이 “이 부분은 유지”, “더 짧게” 하며 방향을 잡는 대화형이 알맞습니다.'},
+    {k:'④',q:'“설문 Excel 3개와 작년 보고서를 분석해서 올해 결과보고서와 PPT를 만들어 줘.”',a:'ChatGPT Work / Claude의 업무형 실행',w:'여러 파일 확인 → 분석 → 계산 → 표·그래프 → 보고서 → PPT로 이어지는 다단계 작업입니다. 목표를 주고 맡긴 뒤 숫자를 검수합니다.'},
+    {k:'⑤',q:'“20개 대학의 2028 입학전형을 조사하고 변경사항 표와 보고서를 만들어 줘.”',a:'ChatGPT Work / Perplexity Computer / Claude의 업무형 실행',w:'여러 사이트를 돌며 조사하고, 비교표와 보고서까지 만드는 일입니다. 변경사항을 매주 확인하게 하려면 예약 작업을 붙입니다. 입시 숫자는 대학 모집요강 원문으로 확인합니다.'},
+    {k:'⑥',q:'“내 컴퓨터의 이 폴더에 있는 파일을 읽고 분류하고 필요한 파일을 새로 만들어 줘.”',a:'ChatGPT Work 데스크톱 / Claude Desktop 기반 업무 / Perplexity Personal Computer',w:'내 PC 폴더에 접근해야 하므로 데스크톱 앱(또는 로컬용 제품)이 필요합니다. 학생 정보가 든 폴더는 연결하지 말고, 작업용 복사본 폴더를 따로 만들어 쓰는 것이 안전합니다.'}
+  ];
+  const pk=document.getElementById('picker'), opts=pk.querySelector('.opts'), out=pk.querySelector('.out');
+  cases.forEach((c,i)=>{
+    const b=document.createElement('button'); b.type='button'; b.textContent='사례 '+c.k; b.setAttribute('aria-pressed','false');
+    b.addEventListener('click',()=>{
+      opts.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      out.innerHTML='<div class="q">'+c.q+'</div><p style="margin:0 0 6px"><strong>알맞은 도구:</strong> '+c.a+'</p><p style="margin:0;color:var(--ink-2)"><strong>이유:</strong> '+c.w+'</p>';
+    });
+    opts.appendChild(b);
+  });
+  opts.querySelector('button').click();
+
+  // quiz
+  const Q=[
+    {s:'Chat은 파일을 쓸 수 없고, Work만 파일을 쓸 수 있다.',a:false,e:'Chat도 업로드 파일과 연결 파일 서비스(Box·Dropbox·SharePoint·Google Drive 등)를 쓸 수 있습니다.'},
+    {s:'Work와 Scheduled Tasks는 별개의 기능이다.',a:true,e:'Work는 일을 수행하는 환경, Scheduled Tasks는 그 일을 언제 실행할지 정하는 기능입니다.'},
+    {s:'ChatGPT Work를 웹에서 쓰면 내 PC 폴더에 직접 접근할 수 있다.',a:false,e:'웹·모바일 Work는 클라우드에서 실행되어 내 PC 파일에 직접 접근하지 못합니다. 데스크톱 앱에서만 가능합니다.'},
+    {s:'Claude는 Pro·Max부터 Chat과 Cowork를 하나로 합치는 중이다.',a:true,e:'새 경험에서는 Claude가 요청을 보고 답할지, 작업할지 판단합니다.'},
+    {s:'Claude Cowork는 데스크톱 앱에서만 쓸 수 있다.',a:false,e:'웹·모바일·Chrome 사이드패널에서도 쓸 수 있습니다. 단, 로컬 파일·브라우저·화면 조작은 데스크톱 앱이 켜져 있어야 합니다.'},
+    {s:'Cowork와 Artifacts는 같은 기능이다.',a:false,e:'Cowork는 일을 수행하는 방식, Artifacts는 결과물을 보여주는 그릇입니다.'},
+    {s:'Perplexity Search는 간단한 질문에만 쓸 수 있다.',a:false,e:'Search도 여러 출처를 비교하는 복잡한 조사를 할 수 있습니다. 차이는 난이도가 아니라 “답이 결과물인가, 실행이 필요한가”입니다.'},
+    {s:'Perplexity Computer에는 AI 모델이 항상 정확히 19개 있다.',a:false,e:'19개는 2026년 2월 출시 당시 수치입니다. 모델 구성은 계속 바뀔 수 있습니다.'},
+    {s:'폴더 접근만 허용했더라도 Computer Use를 켜면 Claude가 화면을 직접 조작할 수 있다.',a:true,e:'Computer Use는 폴더 권한과 다른 형태의 권한입니다. 어떤 기능을 켰는지 함께 확인해야 합니다.'},
+    {s:'AI가 출처를 붙였다면 그 내용은 사실로 봐도 된다.',a:false,e:'출처 원문에 그 숫자와 문장이 실제로 있는지, 날짜와 1차 자료 여부를 확인해야 합니다.'}
+  ];
+  const qz=document.getElementById('quiz'), sc=document.getElementById('score');
+  function renderQuiz(){
+    qz.innerHTML=''; sc.textContent='';
+    Q.forEach((q,i)=>{
+      const d=document.createElement('div'); d.className='qi';
+      d.innerHTML='<p>'+(i+1)+'. '+q.s+'</p><div class="ch"><button type="button" data-v="1">O</button><button type="button" data-v="0">X</button></div><div class="fb"></div>';
+      d.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+        if(d.classList.contains('done'))return;
+        const ok=(b.dataset.v==='1')===q.a;
+        d.classList.add('done',ok?'right':'wrong');
+        d.querySelector('.fb').innerHTML='<strong style="color:var('+(ok?'--ok':'--bad')+')">'+(ok?'정답입니다.':'다시 확인해 보세요.')+'</strong> 정답은 '+(q.a?'O':'X')+'. '+q.e;
+        const done=qz.querySelectorAll('.qi.done').length, right=qz.querySelectorAll('.qi.right').length;
+        sc.textContent='진행 '+done+' / '+Q.length+'  ·  맞힌 문제 '+right;
+      }));
+      qz.appendChild(d);
+    });
+  }
+  renderQuiz();
+  document.getElementById('quizReset').addEventListener('click',renderQuiz);
+
+  // checklist
+  const cb=[...document.querySelectorAll('#checklist input')], co=document.getElementById('checkOut');
+  cb.forEach(c=>c.addEventListener('change',()=>{
+    const n=cb.filter(x=>x.checked).length;
+    co.textContent=n+' / 5 확인'+(n===5?' — 인용해도 좋습니다.':'');
+  }));
+
+  // builder
+  const fields=[...document.querySelectorAll('#builder [data-k]')], bo=document.getElementById('bOut');
+  function build(){
+    const parts=fields.filter(f=>f.value.trim()).map(f=>'['+f.dataset.k+'] '+f.value.trim());
+    bo.textContent = parts.length ? parts.join('\n') + (fields.every(f=>f.value.trim()) ? '' : '\n\n※ 비어 있는 항목: '+fields.filter(f=>!f.value.trim()).map(f=>f.dataset.k).join(', ')) : '칸을 채우면 여기에 지시서가 나타납니다.';
+  }
+  fields.forEach(f=>f.addEventListener('input',build));
+  document.getElementById('bCopy').addEventListener('click',async()=>{
+    const msg=document.getElementById('bMsg');
+    try{await navigator.clipboard.writeText(bo.textContent); msg.textContent='복사했습니다.';}
+    catch(e){msg.textContent='복사하지 못했습니다. 글자를 직접 선택해 복사하세요.';}
+  });
+})();
+</script>
+</body>
+</html>
